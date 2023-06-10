@@ -30,6 +30,10 @@
         outline: none;
         border-color: var(--main-color);
       }
+
+      input:focus::placeholder {
+        color: transparent;
+      }
     }
 
     .login-option {
