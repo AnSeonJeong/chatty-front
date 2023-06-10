@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Authentication from "./pages/Authentication";
 import Main from "./pages/Main";
+import "./styles/common.scss";
 
 function App() {
   return (

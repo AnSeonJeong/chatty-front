@@ -3,7 +3,7 @@ import Login from "../components/Login";
 
 function Authentication() {
   return (
-    <div>
+    <div className="auth-container">
       <Login />
     </div>
   );
