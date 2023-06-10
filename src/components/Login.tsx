@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+
 // css
 import "../styles/Login.scss";
 
@@ -49,7 +50,7 @@ function Login() {
           {/* 로그인 버튼, 회원가입 버튼 */}
           <div className="buttons">
             <input className="loginBtn" type="submit" value="로그인" />
-            <Link to={`/regi`} className="regiBtn">
+            <Link to="/regi" className="regiBtn">
               회원가입
             </Link>
           </div>
