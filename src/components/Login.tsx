@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 
 // css
-import "../styles/Login.scss";
+import "../styles/login.scss";
 
 // images
 import logo from "../assets/logo.png";
