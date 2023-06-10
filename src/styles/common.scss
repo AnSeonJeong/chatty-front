@@ -1,0 +1,28 @@
+@import url("https://cdn.rawgit.com/moonspam/NanumSquare/master/nanumsquare.css");
+
+body {
+  font-family: "NanumSquare", sans-serif;
+}
+
+:root {
+  --main-color: #fd9f28;
+  --dark-color: #242424;
+  --light-gray-color: #b1b1b1;
+  --gray-color: #989898;
+  --white-color: #fff;
+}
+
+.auth-container {
+  box-sizing: border-box;
+
+  position: absolute;
+  width: 454px;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  padding: 50px 66px;
+
+  background: var(--white-color);
+  box-shadow: 2px 3px 10px rgba(0, 0, 0, 0.25);
+  border-radius: 18px;
+}
