@@ -1,9 +1,12 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Authentication from "./pages/Authentication";
 import Main from "./pages/Main";
+import axios from "axios";
 import "./styles/common.scss";
 
 function App() {
+  axios.defaults.baseURL = "http://localhost:9000";
+
   return (
     <div className="App">
       <BrowserRouter>
