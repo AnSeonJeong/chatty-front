@@ -5,7 +5,7 @@ import axios from "axios";
 import "./styles/common.scss";
 
 function App() {
-  axios.defaults.baseURL = "http://localhost:9000";
+  axios.defaults.baseURL = "http://localhost:3000";
 
   return (
     <div className="App">
