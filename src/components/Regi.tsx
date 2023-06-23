@@ -1,21 +1,28 @@
 import { useState } from "react";
 import profile from "../assets/profile_none.png";
 import "../styles/regi.scss";
+import axios from "axios";
 
 function Regi() {
-  const [id, setId] = useState("");
+  const [email, setEmail] = useState("");
   const [pwd, setPwd] = useState("");
   const [confirmPwd, setConfirmPwd] = useState("");
   const [name, setName] = useState("");
   const [birth, setBirth] = useState("");
-  const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
+  const [intro, setIntro] = useState("");
+
+  const onSubmit = () => {
+    let formdata = new FormData();
+
+    axios.post("regi", formdata);
+  };
 
   return (
     <div className="regi-container">
       <h2>회원가입</h2>
       <div className="regi-form">
-        <form>
+        <form name="frm" onSubmit={onSubmit} encType="multipart/form">
           {/* 프로필 사진 업로드 */}
           <div className="profile">
             <div>
@@ -27,9 +34,10 @@ function Regi() {
           {/* 회원 정보 입력 */}
           <div className="info">
             <input
-              value={id}
-              placeholder="아이디"
-              onChange={(e) => setId(e.target.value)}
+              type="email"
+              value={email}
+              placeholder="이메일"
+              onChange={(e) => setEmail(e.target.value)}
             />
             <input
               type="password"
@@ -57,16 +65,15 @@ function Regi() {
               aria-required="true"
             />
             <input
-              type="email"
-              value={email}
-              placeholder="이메일"
-              onChange={(e) => setEmail(e.target.value)}
-            />
-            <input
               type="tel"
               placeholder="전화번호 (ex: 010-1234-5678)"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
+            />
+            <input
+              placeholder="간단한 자기소개를 입력해주세요.😊"
+              value={intro}
+              onChange={(e) => setIntro(e.target.value)}
             />
           </div>
           <input type="submit" className="confirmBtn" value="확인"></input>
