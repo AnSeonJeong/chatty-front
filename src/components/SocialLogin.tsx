@@ -3,7 +3,7 @@ import axios from "axios";
 // 카카오 소셜 로그인
 export const kakaoLogin = () => {
   // 백엔드에서 clientId와 redirect_uri를 받는다
-  axios.get("/login", { params: { type: "kakao" } }).then((res) => {
+  axios.get("/login/social", { params: { type: "kakao" } }).then((res) => {
     const REST_API_KEY = res.data.key;
     const REDIRECT_URI = res.data.uri;
     // OAuth 요청 URL
