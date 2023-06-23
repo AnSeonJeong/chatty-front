@@ -9,6 +9,7 @@ import logo from "../assets/logo.png";
 import naver from "../assets/naver.png";
 import kakao from "../assets/kakao.png";
 import google from "../assets/google.png";
+import { kakaoLogin } from "./SocialLogin";
 
 function Login() {
   const [id, setId] = useState("");
@@ -61,7 +62,7 @@ function Login() {
         <div>간편 로그인</div>
         <div className="others">
           <img src={naver} alt="naver" />
-          <img src={kakao} alt="kakao" />
+          <img src={kakao} alt="kakao" onClick={kakaoLogin} />
           <img src={google} alt="google" />
         </div>
       </div>
