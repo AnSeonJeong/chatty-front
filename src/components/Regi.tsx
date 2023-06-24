@@ -7,9 +7,7 @@ function Regi() {
   const [email, setEmail] = useState("");
   const [pwd, setPwd] = useState("");
   const [confirmPwd, setConfirmPwd] = useState("");
-  const [name, setName] = useState("");
-  const [birth, setBirth] = useState("");
-  const [phone, setPhone] = useState("");
+  const [nickname, setNickname] = useState("");
   const [intro, setIntro] = useState("");
 
   const onSubmit = () => {
@@ -52,23 +50,9 @@ function Regi() {
               onChange={(e) => setConfirmPwd(e.target.value)}
             />
             <input
-              value={name}
+              value={nickname}
               placeholder="이름"
-              onChange={(e) => setName(e.target.value)}
-            />
-            <input
-              type="date"
-              value={birth}
-              data-placeholder="생년월일"
-              onChange={(e) => setBirth(e.target.value)}
-              required
-              aria-required="true"
-            />
-            <input
-              type="tel"
-              placeholder="전화번호 (ex: 010-1234-5678)"
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
+              onChange={(e) => setNickname(e.target.value)}
             />
             <input
               placeholder="간단한 자기소개를 입력해주세요.😊"
