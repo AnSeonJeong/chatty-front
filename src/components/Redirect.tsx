@@ -1,12 +1,14 @@
 import axios from "axios";
+import { useParams } from "react-router-dom";
 
 function Redirect() {
   // 인가 코드 받기
   const AUTHORIZE_CODE = new URL(window.location.href).searchParams.get("code");
+  const { type } = useParams();
 
   // 인가 코드 백엔드에 전달
   axios
-    .get("/redirect", { params: { code: AUTHORIZE_CODE } })
+    .get("/redirect", { params: { code: AUTHORIZE_CODE, type: type } })
     .then((res) => {
       console.log(res.data);
       // 토큰 발급에 성공하면
