@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
 // css
 import "../styles/login.scss";
@@ -9,13 +10,17 @@ import logo from "../assets/logo.png";
 import naver from "../assets/naver.png";
 import kakao from "../assets/kakao.png";
 import google from "../assets/google.png";
-import { kakaoLogin } from "./SocialLogin";
 
 function Login() {
   const [id, setId] = useState("");
   const [pwd, setPwd] = useState("");
 
   const onSubmit = () => {};
+
+  const handleSocialLogin = async (type: string) => {
+    const res = await axios.get(`/login/social`, { params: { type: type } });
+    window.location.href = res.data;
+  };
 
   return (
     <div className="login-container">
@@ -61,9 +66,21 @@ function Login() {
       <div className="other-login">
         <div>간편 로그인</div>
         <div className="others">
-          <img src={naver} alt="naver" />
-          <img src={kakao} alt="kakao" onClick={kakaoLogin} />
-          <img src={google} alt="google" />
+          <img
+            src={naver}
+            alt="naver"
+            onClick={() => handleSocialLogin("naver")}
+          />
+          <img
+            src={kakao}
+            alt="kakao"
+            onClick={() => handleSocialLogin("kakao")}
+          />
+          <img
+            src={google}
+            alt="google"
+            onClick={() => handleSocialLogin("google")}
+          />
         </div>
       </div>
     </div>
