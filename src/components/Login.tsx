@@ -15,7 +15,18 @@ function Login() {
   const [id, setId] = useState("");
   const [pwd, setPwd] = useState("");
 
-  const onSubmit = () => {};
+  const handleLogin = (e: any) => {
+    e.preventDefault();
+
+    const formdata = new FormData();
+    formdata.append("email", id);
+    formdata.append("pwd", pwd);
+
+    axios
+      .post("/login", formdata)
+      .then((res) => alert(res.data.failMsg))
+      .catch((err) => console.log(err));
+  };
 
   const handleSocialLogin = async (type: string) => {
     const res = await axios.get(`/login/social`, { params: { type: type } });
@@ -29,7 +40,7 @@ function Login() {
       </div>
       {/* 로그인 입력 폼 */}
       <div className="login-form">
-        <form name="frm" onSubmit={onSubmit} encType="multipart/form">
+        <form name="login-frm" onSubmit={handleLogin} encType="multipart/form">
           <div className="login">
             <input
               value={id}
@@ -55,7 +66,12 @@ function Login() {
           </div>
           {/* 로그인 버튼, 회원가입 버튼 */}
           <div className="buttons">
-            <input className="loginBtn" type="submit" value="로그인" />
+            <input
+              className="loginBtn"
+              type="submit"
+              value="로그인"
+              name="login_info"
+            />
             <Link to="/regi" className="regiBtn">
               회원가입
             </Link>
