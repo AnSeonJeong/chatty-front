@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 // css
@@ -14,9 +14,20 @@ import google from "../assets/google.png";
 function Login() {
   const [email, setEmail] = useState("");
   const [pwd, setPwd] = useState("");
+  const [isChecked, setIsChecked] = useState<boolean>(false);
+
+  const history = useNavigate();
 
   const handleLogin = (e: any) => {
     e.preventDefault();
+
+    if (!email) {
+      alert("아이디(이메일)을 입력해주세요.");
+      return;
+    } else if (!pwd) {
+      alert("비밀번호를 입력해주세요.");
+      return;
+    }
 
     const formdata = new FormData();
     formdata.append("email", email);
@@ -24,7 +35,15 @@ function Login() {
 
     axios
       .post("/login", formdata)
-      .then((res) => alert(res.data.failMsg))
+      .then((res) => {
+        if (res.data.failMsg) {
+          alert(res.data.failMsg);
+        } else {
+          history("/main?success=true");
+          if (isChecked) localStorage.setItem("login", email);
+          else localStorage.removeItem("login");
+        }
+      })
       .catch((err) => console.log(err));
   };
 
@@ -32,6 +51,17 @@ function Login() {
     const res = await axios.get(`/login/social`, { params: { type: type } });
     window.location.href = res.data;
   };
+
+  useEffect(() => {
+    const loginData = localStorage.getItem("login");
+
+    if (loginData && loginData !== "") {
+      setIsChecked(true);
+      setEmail(loginData);
+    } else {
+      setIsChecked(false);
+    }
+  }, []);
 
   return (
     <div className="login-container">
@@ -44,7 +74,7 @@ function Login() {
           <div className="login">
             <input
               value={email}
-              placeholder="이메일"
+              placeholder="아이디(이메일)"
               onChange={(e) => setEmail(e.target.value)}
             />
             <input
@@ -57,7 +87,11 @@ function Login() {
           {/* 로그인 옵션 */}
           <div className="login-option">
             <label>
-              <input type="checkbox" />
+              <input
+                type="checkbox"
+                onChange={() => setIsChecked(!isChecked)}
+                checked={isChecked}
+              />
               아이디 저장
             </label>
             <span>
