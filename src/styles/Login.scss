@@ -1,0 +1,118 @@
+.login-container {
+  .logo {
+    /* chatty_logo */
+    text-align: center;
+  }
+
+  .login-form {
+    text-align: center;
+    width: 100%;
+    margin-top: 22px;
+
+    .login {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      // 아이디,비밀번호 입력
+      input {
+        height: 49px;
+        padding-left: 20px;
+
+        border: 1px solid var(--light-gray-color);
+        border-radius: 5px;
+      }
+
+      input:first-child {
+        margin-bottom: 10px;
+      }
+
+      input:focus {
+        outline: none;
+        border-color: var(--main-color);
+      }
+
+      input:focus::placeholder {
+        color: transparent;
+      }
+    }
+
+    .login-option {
+      display: flex;
+      justify-content: space-between;
+
+      margin: 12px 0;
+      font-weight: 400;
+      font-size: 12px;
+      // line-height: 15px;
+
+      color: var(--gray-color);
+
+      a {
+        text-decoration: none;
+        color: var(--gray-color);
+      }
+
+      input {
+        margin: 0 5px 0 0;
+        vertical-align: -2px;
+      }
+    }
+
+    .buttons {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+
+      input,
+      a {
+        border: none;
+        border-radius: 5px;
+        color: var(--white-color);
+        height: 49px;
+        cursor: pointer;
+
+        font-size: 15px;
+        line-height: 49px;
+      }
+
+      a {
+        text-decoration: none;
+      }
+
+      .loginBtn {
+        background-color: var(--main-color);
+        margin-bottom: 12px;
+      }
+
+      .regiBtn {
+        background-color: var(--dark-color);
+      }
+    }
+  }
+
+  .other-login {
+    text-align: center;
+    margin-top: 55px;
+
+    div:first-child {
+      font-weight: 400;
+      font-size: 14px;
+      line-height: 15px;
+
+      color: var(--gray-color);
+    }
+
+    .others {
+      margin-top: 22px;
+
+      img {
+        filter: drop-shadow(1px 1px 4px rgba(0, 0, 0, 0.25));
+        cursor: pointer;
+      }
+
+      img:not(:last-child) {
+        margin-right: 24px;
+      }
+    }
+  }
+}
