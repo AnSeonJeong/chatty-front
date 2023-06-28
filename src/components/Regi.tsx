@@ -55,7 +55,48 @@ function Regi() {
     return <div className="err_message">{msg}</div>;
   };
 
-  const handleRegi = () => {};
+  // 프로필 이미지 업로드
+  const saveProfileImage = async (id: number) => {
+    let imageFormdata = new FormData();
+    if (saveImg !== undefined) imageFormdata.append("profile", saveImg);
+
+    await axios.post("/regi/upload", imageFormdata, {
+      params: { id: id },
+    });
+  };
+
+  // 회원가입
+  const handleRegi = async (e: any) => {
+    e.preventDefault();
+    let formdata = new FormData();
+    formdata.append("email", email);
+    formdata.append("password", pwd);
+    formdata.append("nickname", nickname);
+    formdata.append("intro", intro);
+
+    if (!email || !pwd || !confirmPwd || !nickname) {
+      alert("필수 입력 값이 비었습니다");
+      return;
+    } else if (pwd !== confirmPwd) {
+      alert("비밀번호를 확인해주세요.");
+      return;
+    }
+
+    try {
+      const res = await axios.post("/regi", formdata);
+      if (typeof res.data === "string") {
+        alert(res.data);
+      } else {
+        saveProfileImage(res.data.id);
+        alert(
+          `${res.data.nickname}님 환영합니다!!!😚\n바로 로그인 페이지로 이동합니다.`
+        );
+        history("/login");
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   return (
     <div className="regi-container">
