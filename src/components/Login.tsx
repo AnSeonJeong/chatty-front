@@ -12,14 +12,14 @@ import kakao from "../assets/kakao.png";
 import google from "../assets/google.png";
 
 function Login() {
-  const [id, setId] = useState("");
+  const [email, setEmail] = useState("");
   const [pwd, setPwd] = useState("");
 
   const handleLogin = (e: any) => {
     e.preventDefault();
 
     const formdata = new FormData();
-    formdata.append("email", id);
+    formdata.append("email", email);
     formdata.append("pwd", pwd);
 
     axios
@@ -43,9 +43,9 @@ function Login() {
         <form name="login-frm" onSubmit={handleLogin} encType="multipart/form">
           <div className="login">
             <input
-              value={id}
-              placeholder="아이디"
-              onChange={(e) => setId(e.target.value)}
+              value={email}
+              placeholder="이메일"
+              onChange={(e) => setEmail(e.target.value)}
             />
             <input
               type="password"
