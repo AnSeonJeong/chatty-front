@@ -66,7 +66,7 @@ function Regi() {
   };
 
   // 회원가입
-  const handleRegi = async (e: any) => {
+  const handleRegi = (e: any) => {
     e.preventDefault();
     let formdata = new FormData();
     formdata.append("email", email);
@@ -82,20 +82,20 @@ function Regi() {
       return;
     }
 
-    try {
-      const res = await axios.post("/regi", formdata);
-      if (typeof res.data === "string") {
-        alert(res.data);
-      } else {
-        saveProfileImage(res.data.id);
-        alert(
-          `${res.data.nickname}님 환영합니다!!!😚\n바로 로그인 페이지로 이동합니다.`
-        );
-        history("/login");
-      }
-    } catch (err) {
-      console.log(err);
-    }
+    axios
+      .post("/regi", formdata)
+      .then((res) => {
+        if (res.data) {
+          saveProfileImage(res.data.id);
+          alert(
+            `${res.data.nickname}님 환영합니다!!!😚\n바로 로그인 페이지로 이동합니다.`
+          );
+          history("/login");
+        }
+      })
+      .catch((err) => {
+        alert(err.response.data.error);
+      });
   };
 
   return (

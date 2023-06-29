@@ -36,15 +36,13 @@ function Login() {
     axios
       .post("/login", formdata)
       .then((res) => {
-        if (res.data.failMsg) {
-          alert(res.data.failMsg);
-        } else {
+        if (res.data) {
           history("/main?success=true");
           if (isChecked) localStorage.setItem("login", email);
           else localStorage.removeItem("login");
         }
       })
-      .catch((err) => console.log(err));
+      .catch((err) => alert(err.response.data.error));
   };
 
   const handleSocialLogin = async (type: string) => {
