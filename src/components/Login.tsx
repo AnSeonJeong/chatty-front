@@ -34,15 +34,19 @@ function Login() {
     formdata.append("pwd", pwd);
 
     axios
-      .post("/login", formdata)
+      .post("/login", formdata, { withCredentials: true })
       .then((res) => {
         if (res.data) {
+          const token = res.data;
+          axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
           history("/main?success=true");
           if (isChecked) localStorage.setItem("login", email);
           else localStorage.removeItem("login");
         }
       })
-      .catch((err) => alert(err.response.data.error));
+      .catch((err) => {
+        alert(err.response.data.error);
+      });
   };
 
   const handleSocialLogin = async (type: string) => {

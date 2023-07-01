@@ -8,7 +8,10 @@ function Redirect() {
   const history = useNavigate();
   //  인가 코드 백엔드에 전달
   axios
-    .get("/redirect", { params: { code: AUTHORIZE_CODE, type: type } })
+    .get("/redirect", {
+      params: { code: AUTHORIZE_CODE, type: type },
+      withCredentials: true,
+    })
     .then((res) => {
       if (res.data) {
         // 토큰 발급에 성공하면 공통 헤더 설정
