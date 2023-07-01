@@ -39,7 +39,7 @@ function Login() {
         if (res.data) {
           const token = res.data;
           axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-          history("/main?success=true");
+          history("/main");
           if (isChecked) localStorage.setItem("login", email);
           else localStorage.removeItem("login");
         }
