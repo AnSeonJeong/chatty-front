@@ -13,15 +13,17 @@ function Main() {
   const [profileUrl, setProfileUrl] = useState("");
   const [profile, setProfile] = useState("");
   const [email, setEmail] = useState("");
+  const [dataList, setDataList] = useState([]);
 
   const { menu } = useParams();
+
   const Content = () => {
     if (menu === "chats") return <Chats />;
-    else if (menu === "friends") return <Friends />;
+    else if (menu === "friends") return <Friends dataList={dataList} />;
     else if (menu === "profile") return <Profile />;
     else return null;
   };
-
+  console.log(dataList);
   useEffect(() => {
     axios
       .get("/main", { withCredentials: true })
@@ -46,6 +48,7 @@ function Main() {
         nickname={nickname}
         email={email}
         profileUrl={profileUrl}
+        setDataList={setDataList}
       />
       <Content />
     </div>
