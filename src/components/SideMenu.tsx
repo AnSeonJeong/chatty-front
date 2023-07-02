@@ -4,7 +4,7 @@ import {
   faUserFriends,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import side_logo from "../assets/side_logo.png";
 import profileNone from "../assets/profile_none.png";
 
@@ -18,6 +18,12 @@ type Params = {
 function SideMenu(params: Params) {
   const { profile, profileUrl, nickname, email } = params;
 
+  const menus = [
+    { name: "Chats", icon: faCommentDots, path: "/main/chats" },
+    { name: "friends", icon: faUserFriends, path: "/main/friends" },
+    { name: "Profile", icon: faUserCircle, path: "/main/Profile" },
+  ];
+
   return (
     <div>
       <div className="side_menu">
@@ -25,30 +31,18 @@ function SideMenu(params: Params) {
           <img src={side_logo} />
         </div>
         <ul>
-          <Link to="/main/chats">
-            <li>
-              <span className="icon">
-                <FontAwesomeIcon icon={faCommentDots} />
-              </span>
-              <span className="menu">Chats</span>
-            </li>
-          </Link>
-          <Link to="/main/friends">
-            <li>
-              <span className="icon">
-                <FontAwesomeIcon icon={faUserFriends} />
-              </span>
-              <span className="menu">Friends</span>
-            </li>
-          </Link>
-          <Link to="/main/profile">
-            <li>
-              <span className="icon">
-                <FontAwesomeIcon icon={faUserCircle} />
-              </span>
-              <span className="menu">Profile</span>
-            </li>
-          </Link>
+          {menus.map((menu, index) => {
+            return (
+              <Link to={menu.path} key={index}>
+                <li>
+                  <span className="icon">
+                    <FontAwesomeIcon icon={menu.icon} />
+                  </span>
+                  <span className="menu">{menu.name}</span>
+                </li>
+              </Link>
+            );
+          })}
         </ul>
         <div className="user">
           <div className="user_profile">
