@@ -34,17 +34,19 @@ function Login() {
     formdata.append("pwd", pwd);
 
     axios
-      .post("/login", formdata)
+      .post("/login", formdata, { withCredentials: true })
       .then((res) => {
-        if (res.data.failMsg) {
-          alert(res.data.failMsg);
-        } else {
-          history("/main?success=true");
+        if (res.data) {
+          const token = res.data;
+          axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+          history("/main");
           if (isChecked) localStorage.setItem("login", email);
           else localStorage.removeItem("login");
         }
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        alert(err.response.data.error);
+      });
   };
 
   const handleSocialLogin = async (type: string) => {
