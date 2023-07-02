@@ -1,84 +1,88 @@
-.side_menu {
-  width: 277px;
-  height: 100vh;
-  background-color: var(--main-color);
+.main_wrap {
+  display: flex;
 
-  .side_logo {
-    text-align: center;
-    img {
-      padding: 100px 0 80px 0;
-    }
-  }
+  .side_menu {
+    width: 300px;
+    height: 100vh;
+    background-color: var(--main-color);
 
-  ul {
-    list-style: none;
-    padding: 0;
-    font-size: 18px;
-    font-weight: 700;
-
-    a {
-      text-decoration: none;
-      color: var(--dark-color);
-    }
-
-    li {
-      padding: 25px 80px;
-      color: var(--white-color);
-
-      .icon {
-        width: 24px;
-        display: inline-block;
-        text-align: center;
-        margin-right: 20px;
-      }
-    }
-
-    li:hover {
-      background-color: #ffb251;
-    }
-  }
-
-  .user {
-    position: fixed;
-    bottom: 0;
-    left: 5px;
-    display: flex;
-    border-top: 0.5px solid #ffe3ad;
-    margin: 0 20px;
-    padding: 18px 15px;
-
-    .user_profile {
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-      overflow: hidden;
-      position: relative;
-
+    .side_logo {
+      text-align: center;
       img {
-        height: 100%;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        background-color: var(--white-color);
+        padding: 100px 0 80px 0;
       }
     }
 
-    .user_con {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      margin-left: 20px;
-      color: var(--white-color);
+    ul {
+      list-style: none;
+      padding: 0;
+      font-size: 18px;
+      font-weight: 700;
 
-      .user_nickname {
-        font-weight: bold;
-        padding-bottom: 7px;
+      a {
+        text-decoration: none;
+        color: var(--dark-color);
       }
 
-      .user_email {
-        font-size: 13px;
-        font-weight: 300;
+      li {
+        padding: 25px 80px;
+        color: var(--white-color);
+
+        .icon {
+          width: 24px;
+          display: inline-block;
+          text-align: center;
+          margin-right: 20px;
+        }
+      }
+
+      li:hover {
+        background-color: #ffb251;
+      }
+    }
+
+    .user {
+      width: 229px;
+      position: fixed;
+      bottom: 0;
+      display: flex;
+      border-top: 0.5px solid #ffe3ad;
+      margin: 0 20px;
+      padding: 18px 15px;
+
+      .user_profile {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        overflow: hidden;
+        position: relative;
+
+        img {
+          height: 100%;
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          background-color: var(--white-color);
+        }
+      }
+
+      .user_con {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        margin: 0 20px 0 25px;
+        color: var(--white-color);
+
+        .user_nickname {
+          font-weight: bold;
+          padding-bottom: 7px;
+        }
+
+        .user_email {
+          font-size: 13px;
+          font-weight: 300;
+        }
       }
     }
   }
