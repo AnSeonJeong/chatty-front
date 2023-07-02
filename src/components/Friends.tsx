@@ -19,9 +19,9 @@ function Friends({ dataList }: { dataList: FriendList[] }) {
     <div className="container">
       <div>
         <div className="title">
-          <h3>Friends</h3>
+          <h2>Friends</h2>
           <button className="addBtn" onClick={handleAddFriends}>
-            <FontAwesomeIcon icon={faUserPlus} />
+            <FontAwesomeIcon className="btnIcon" icon={faUserPlus} />
           </button>
         </div>
         <ul className="info">
@@ -29,7 +29,7 @@ function Friends({ dataList }: { dataList: FriendList[] }) {
             <li key={i}>
               <div className="profileImg">
                 <img
-                  src={friend.profile !== "" ? friend.profileUrl : profileNone}
+                  src={friend.profile ? friend.profileUrl : profileNone}
                   alt={friend.nickname}
                 />
               </div>
