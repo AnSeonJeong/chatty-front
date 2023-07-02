@@ -1,21 +1,26 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import side_logo from "../assets/side_logo.png";
+import { useNavigate, useParams } from "react-router-dom";
 import "../styles/main.scss";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faCommentDots,
-  faUserCircle,
-  faUserFriends,
-} from "@fortawesome/free-solid-svg-icons";
-import profileNone from "../assets/profile_none.png";
+import SideMenu from "../components/SideMenu";
+import Chats from "../components/Chats";
+import Friends from "../components/Friends";
+import Profile from "../components/Profile";
 
 function Main() {
   const history = useNavigate();
   const [nickname, setNickname] = useState("");
   const [profileUrl, setProfileUrl] = useState("");
+  const [profile, setProfile] = useState("");
   const [email, setEmail] = useState("");
+
+  const { menu } = useParams();
+  const Content = () => {
+    if (menu === "chats") return <Chats />;
+    else if (menu === "friends") return <Friends />;
+    else if (menu === "profile") return <Profile />;
+    else return null;
+  };
 
   useEffect(() => {
     axios
@@ -23,6 +28,7 @@ function Main() {
       .then((res) => {
         console.log(res.data);
         setProfileUrl(res.data.profileUrl);
+        setProfile(res.data.profile);
         setNickname(res.data.nickname);
         setEmail(res.data.email);
       })
@@ -34,47 +40,14 @@ function Main() {
   }, []);
 
   return (
-    <div>
-      <div className="side_menu">
-        <div className="side_logo">
-          <img src={side_logo} />
-        </div>
-        <ul>
-          <Link to="chats">
-            <li>
-              <span className="icon">
-                <FontAwesomeIcon icon={faCommentDots} />
-              </span>
-              <span className="menu">Chats</span>
-            </li>
-          </Link>
-          <Link to="friends">
-            <li>
-              <span className="icon">
-                <FontAwesomeIcon icon={faUserFriends} />
-              </span>
-              <span className="menu">Friends</span>
-            </li>
-          </Link>
-          <Link to="profile">
-            <li>
-              <span className="icon">
-                <FontAwesomeIcon icon={faUserCircle} />
-              </span>
-              <span className="menu">Profile</span>
-            </li>
-          </Link>
-        </ul>
-        <div className="user">
-          <div className="user_profile">
-            <img src={profileUrl !== "" ? profileUrl : profileNone} />
-          </div>
-          <div className="user_con">
-            <span className="user_nickname">{nickname}</span>
-            <span className="user_email">{email}</span>
-          </div>
-        </div>
-      </div>
+    <div className="main_wrap">
+      <SideMenu
+        profile={profile}
+        nickname={nickname}
+        email={email}
+        profileUrl={profileUrl}
+      />
+      <Content />
     </div>
   );
 }

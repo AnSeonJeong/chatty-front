@@ -14,7 +14,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Navigate replace to="/login" />} />
           <Route path="/:auth/*" element={<Authentication />} />
-          <Route path="/main" element={<Main />} />
+          <Route path="/main/:menu" element={<Main />} />
           <Route path="/redirect/:type" element={<Redirect />} />
         </Routes>
       </BrowserRouter>
