@@ -1,46 +1,17 @@
-import { useState, useEffect } from "react";
 import { faUserPlus } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import profileNone from "../../assets/profile_none.png";
-
-interface FriendList {
-  id: number;
-  email: string;
-  nickname: string;
-  profile: string;
-  intro: string;
-  profileUrl: string;
-}
+import ListContainer from "./content/ListContainer";
 
 function Friends({ dataList }: { dataList: FriendList[] }) {
   const handleAddFriends = () => {};
-  console.log(dataList);
+
   return (
     <div className="container">
-      <div className="left-content">
-        <div className="title">
-          <h2>Friends</h2>
-          <button className="addBtn" onClick={handleAddFriends}>
-            <FontAwesomeIcon className="btnIcon" icon={faUserPlus} />
-          </button>
-        </div>
-        <ul className="info">
-          {dataList.map((friend, i) => (
-            <li key={i}>
-              <div className="profileImg">
-                <img
-                  src={friend.profile ? friend.profileUrl : profileNone}
-                  alt={friend.nickname}
-                />
-              </div>
-              <div className="user_info">
-                <span>{friend.nickname}</span>
-                <span>{friend.intro}</span>
-              </div>
-            </li>
-          ))}
-        </ul>
-      </div>
+      <ListContainer
+        title="Friends"
+        dataList={dataList}
+        handleAdd={handleAddFriends}
+        icon={faUserPlus}
+      />
       <div className="right-content"></div>
     </div>
   );
