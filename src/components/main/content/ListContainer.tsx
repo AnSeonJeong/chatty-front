@@ -1,6 +1,7 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import profileNone from "../../../assets/profile_none.png";
 import { IconDefinition } from "@fortawesome/free-solid-svg-icons";
+import { Link } from "react-router-dom";
 
 interface Props {
   title: string;
@@ -16,18 +17,20 @@ function ListContainer(props: Props) {
     return (
       <>
         {dataList.map((data, i) => (
-          <li key={i}>
-            <div className="profileImg">
-              <img
-                src={data.profile ? data.profileUrl : profileNone}
-                alt={data.nickname}
-              />
-            </div>
-            <div className="user_info">
-              <span>{data.nickname}</span>
-              <span>{data.intro}</span>
-            </div>
-          </li>
+          <Link to={`/main/friends/${data.id}`} key={i}>
+            <li>
+              <div className="profileImg">
+                <img
+                  src={data.profile ? data.profileUrl : profileNone}
+                  alt={data.nickname}
+                />
+              </div>
+              <div className="user_info">
+                <span>{data.nickname}</span>
+                <span>{data.intro}</span>
+              </div>
+            </li>
+          </Link>
         ))}
       </>
     );
