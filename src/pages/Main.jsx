@@ -23,6 +23,16 @@ function Main() {
     else if (menu === "profile") return <Profile />;
     else return null;
   };
+
+  const fetchData = (menu) => {
+    axios
+      .get(`/main/${menu}`, { withCredentials: true })
+      .then((res) => {
+        setDataList(res.data);
+      })
+      .catch((err) => console.log(err));
+  };
+
   console.log(dataList);
   useEffect(() => {
     axios
@@ -40,6 +50,10 @@ function Main() {
         history("/login");
       });
   }, []);
+
+  useEffect(() => {
+    fetchData(menu);
+  }, [menu]);
 
   return (
     <div className="main_wrap">

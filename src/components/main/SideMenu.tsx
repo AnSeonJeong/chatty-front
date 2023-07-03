@@ -7,33 +7,22 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
 import side_logo from "../../assets/side_logo.png";
 import profileNone from "../../assets/profile_none.png";
-import axios from "axios";
 
-type Params = {
+type Props = {
   profile: string;
   profileUrl: string;
   nickname: string;
   email: string;
-  setDataList: any;
 };
 
-function SideMenu(params: Params) {
-  const { profile, profileUrl, nickname, email, setDataList } = params;
+function SideMenu(props: Props) {
+  const { profile, profileUrl, nickname, email } = props;
 
   const menus = [
     { name: "Chats", icon: faCommentDots, path: "/main/chats" },
     { name: "friends", icon: faUserFriends, path: "/main/friends" },
     { name: "Profile", icon: faUserCircle, path: "/main/Profile" },
   ];
-
-  const handleMenuContent = (menu: string) => {
-    axios
-      .get(`/main/${menu}`, { withCredentials: true })
-      .then((res) => {
-        setDataList(res.data);
-      })
-      .catch((err) => console.log(err));
-  };
 
   return (
     <div>
@@ -44,11 +33,7 @@ function SideMenu(params: Params) {
         <ul>
           {menus.map((menu, index) => {
             return (
-              <Link
-                to={menu.path}
-                key={index}
-                onClick={() => handleMenuContent(menu.name)}
-              >
+              <Link to={menu.path} key={index}>
                 <li>
                   <span className="icon">
                     <FontAwesomeIcon icon={menu.icon} />
