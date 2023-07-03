@@ -1,23 +1,33 @@
 import { useParams } from "react-router-dom";
 import profileNone from "../../../assets/profile_none.png";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
-function ContentContianer({ dataList }: { dataList: FriendList[] }) {
+function ContentContianer() {
   const { id } = useParams();
+  const [userInfo, setUserInfo] = useState<FriendList>({} as FriendList);
 
-  const FriendInfo = () => {
-    const friend = dataList.find((data) => data.id.toString() === id);
-    console.log(friend);
+  useEffect(() => {
+    axios
+      .get(`/users/${id}`, { withCredentials: true })
+      .then((res) => {
+        console.log(res);
+        setUserInfo(res.data);
+      })
+      .catch((err) => console.log(err));
+  }, [id]);
 
+  const UserInfo = () => {
     return (
       <div className="user_info">
         <div>
           <div className="profileImg">
-            <img src={friend?.profile ? friend?.profileUrl : profileNone} />
+            <img src={userInfo.profile ? userInfo.profileUrl : profileNone} />
           </div>
           <ul>
-            <li className="nickname">{friend?.nickname}</li>
-            <li className="email">{friend?.email}</li>
-            <li className="intro">{friend?.intro}</li>
+            <li className="nickname">{userInfo.nickname}</li>
+            <li className="email">{userInfo.email}</li>
+            <li className="intro">{userInfo.intro}</li>
           </ul>
         </div>
         <div className="btns">
@@ -30,8 +40,8 @@ function ContentContianer({ dataList }: { dataList: FriendList[] }) {
 
   return (
     <div className="content">
-      {id && <div className="background"></div>}
-      {id && <FriendInfo />}
+      {userInfo && id && <div className="background"></div>}
+      {userInfo && id && <UserInfo />}
     </div>
   );
 }
