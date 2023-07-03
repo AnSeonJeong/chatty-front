@@ -33,7 +33,6 @@ function Main() {
       .catch((err) => console.log(err));
   };
 
-  console.log(dataList);
   useEffect(() => {
     axios
       .get("/main", { withCredentials: true })
@@ -62,7 +61,6 @@ function Main() {
         nickname={nickname}
         email={email}
         profileUrl={profileUrl}
-        setDataList={setDataList}
       />
       <Content />
     </div>
