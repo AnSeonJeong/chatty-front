@@ -1,5 +1,6 @@
 import { faUserPlus } from "@fortawesome/free-solid-svg-icons";
 import ListContainer from "./content/ListContainer";
+import ContentContianer from "./content/ContentContainer";
 
 function Friends({ dataList }: { dataList: FriendList[] }) {
   const handleAddFriends = () => {};
@@ -12,7 +13,7 @@ function Friends({ dataList }: { dataList: FriendList[] }) {
         handleAdd={handleAddFriends}
         icon={faUserPlus}
       />
-      <div className="right-content"></div>
+      <ContentContianer dataList={dataList} />
     </div>
   );
 }
