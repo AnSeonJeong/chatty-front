@@ -2,10 +2,10 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import "../styles/main.scss";
-import SideMenu from "../components/SideMenu";
-import Chats from "../components/Chats";
-import Friends from "../components/Friends";
-import Profile from "../components/Profile";
+import SideMenu from "../components/main/SideMenu";
+import Chats from "../components/main/Chats";
+import Friends from "../components/main/Friends";
+import Profile from "../components/main/Profile";
 
 function Main() {
   const history = useNavigate();

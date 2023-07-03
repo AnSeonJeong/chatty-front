@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { faUserPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import profileNone from "../assets/profile_none.png";
+import profileNone from "../../assets/profile_none.png";
 
 interface FriendList {
   id: number;

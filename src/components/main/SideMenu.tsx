@@ -4,9 +4,9 @@ import {
   faUserFriends,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Link, NavLink } from "react-router-dom";
-import side_logo from "../assets/side_logo.png";
-import profileNone from "../assets/profile_none.png";
+import { Link } from "react-router-dom";
+import side_logo from "../../assets/side_logo.png";
+import profileNone from "../../assets/profile_none.png";
 import axios from "axios";
 
 type Params = {

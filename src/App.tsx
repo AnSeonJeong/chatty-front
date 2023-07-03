@@ -3,7 +3,7 @@ import Authentication from "./pages/Authentication";
 import Main from "./pages/Main";
 import axios from "axios";
 import "./styles/common.scss";
-import Redirect from "./components/Redirect";
+import Redirect from "./components/authentication/Redirect";
 
 function App() {
   axios.defaults.baseURL = "http://localhost:3000";

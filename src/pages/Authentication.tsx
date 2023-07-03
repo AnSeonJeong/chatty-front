@@ -2,7 +2,7 @@ import React from "react";
 import Login from "../components/authentication/Login";
 import { Routes, Route, useParams } from "react-router-dom";
 import Regi from "../components/authentication/Regi";
-import FindAccount from "../components/FindAccount";
+import FindAccount from "../components/authentication/FindAccount";
 
 function Authentication() {
   const { auth } = useParams();
