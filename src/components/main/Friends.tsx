@@ -17,7 +17,7 @@ function Friends({ dataList }: { dataList: FriendList[] }) {
   console.log(dataList);
   return (
     <div className="container">
-      <div>
+      <div className="left-content">
         <div className="title">
           <h2>Friends</h2>
           <button className="addBtn" onClick={handleAddFriends}>
@@ -41,7 +41,7 @@ function Friends({ dataList }: { dataList: FriendList[] }) {
           ))}
         </ul>
       </div>
-      <div></div>
+      <div className="right-content"></div>
     </div>
   );
 }
