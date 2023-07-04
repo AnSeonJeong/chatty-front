@@ -5,4 +5,5 @@ type FriendList = {
   profile: string;
   intro: string;
   profileUrl: string;
+  isFriend: boolean;
 };

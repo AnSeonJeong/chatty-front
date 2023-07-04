@@ -1,11 +1,12 @@
-import { useParams } from "react-router-dom";
+import { useFetcher, useParams } from "react-router-dom";
 import profileNone from "../../../assets/profile_none.png";
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import axios from "axios";
 
 function ContentContianer() {
   const { id } = useParams();
   const [userInfo, setUserInfo] = useState<FriendList>({} as FriendList);
+  const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
     axios
@@ -13,29 +14,36 @@ function ContentContianer() {
       .then((res) => {
         console.log(res);
         setUserInfo(res.data);
+        setIsLoaded(true);
       })
       .catch((err) => console.log(err));
   }, [id]);
 
   const UserInfo = () => {
-    return (
-      <div className="user_info">
-        <div>
-          <div className="profileImg">
-            <img src={userInfo.profile ? userInfo.profileUrl : profileNone} />
+    if (!isLoaded) {
+      return <div>Loading...</div>;
+    } else if (!userInfo) {
+      return <div>User not found</div>;
+    } else {
+      return (
+        <div className="user_info">
+          <div>
+            <div className="profileImg">
+              <img src={userInfo.profile ? userInfo.profileUrl : profileNone} />
+            </div>
+            <ul>
+              <li className="nickname">{userInfo.nickname}</li>
+              <li className="email">{userInfo.email}</li>
+              <li className="intro">{userInfo.intro}</li>
+            </ul>
           </div>
-          <ul>
-            <li className="nickname">{userInfo.nickname}</li>
-            <li className="email">{userInfo.email}</li>
-            <li className="intro">{userInfo.intro}</li>
-          </ul>
+          <div className="btns">
+            <button>{userInfo.isFriend ? "친구삭제" : "친구추가"}</button>
+            <button>채팅하기</button>
+          </div>
         </div>
-        <div className="btns">
-          <button>친구삭제</button>
-          <button>채팅하기</button>
-        </div>
-      </div>
-    );
+      );
+    }
   };
 
   return (
