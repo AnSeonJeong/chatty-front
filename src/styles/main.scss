@@ -140,6 +140,10 @@
       }
 
       .info {
+        a {
+          color: var(--dark-color);
+        }
+
         li {
           display: flex;
           padding: 20px 50px;
