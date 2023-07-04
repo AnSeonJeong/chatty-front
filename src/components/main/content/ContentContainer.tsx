@@ -1,12 +1,14 @@
-import { useFetcher, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import profileNone from "../../../assets/profile_none.png";
-import { useEffect, useLayoutEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 
 function ContentContianer() {
   const { id } = useParams();
   const [userInfo, setUserInfo] = useState<FriendList>({} as FriendList);
   const [isLoaded, setIsLoaded] = useState(false);
+
+  const history = useNavigate();
 
   useEffect(() => {
     axios
@@ -38,12 +40,29 @@ function ContentContianer() {
             </ul>
           </div>
           <div className="btns">
-            <button>{userInfo.isFriend ? "친구삭제" : "친구추가"}</button>
+            <button
+              onClick={() => handleFriendship(userInfo.isFriend, userInfo.id)}
+            >
+              {userInfo.isFriend ? "친구삭제" : "친구신청"}
+            </button>
             <button>채팅하기</button>
           </div>
         </div>
       );
     }
+  };
+
+  const handleFriendship = (isFriend: boolean, id: number) => {
+    let str = isFriend ? "remove" : "add";
+    console.log(isFriend, str);
+
+    axios
+      .post(`/friends/${str}/${id}`, null, { withCredentials: true })
+      .then((res) => {
+        alert(res.data);
+        history("/main/friends");
+      })
+      .catch((err) => alert(err.response.data.error));
   };
 
   return (
