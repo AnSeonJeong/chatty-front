@@ -39,7 +39,7 @@ function Login() {
         if (res.data) {
           const token = res.data;
           axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-          history("/main");
+          history("/main/chats");
           if (isChecked) localStorage.setItem("login", email);
           else localStorage.removeItem("login");
         }
@@ -50,7 +50,7 @@ function Login() {
   };
 
   const handleSocialLogin = async (type: string) => {
-    const res = await axios.get(`/login/social`, { params: { type: type } });
+    const res = await axios.get(`/login/${type}`);
     window.location.href = res.data;
   };
 
