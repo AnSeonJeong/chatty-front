@@ -2,6 +2,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import profileNone from "../../../assets/profile_none.png";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import ChatRoom from "../chats/Chatroom";
 
 function ContentContianer() {
   const { id } = useParams();
@@ -9,8 +10,11 @@ function ContentContianer() {
   const [isLoaded, setIsLoaded] = useState(false);
 
   const history = useNavigate();
+  const { menu } = useParams();
 
   useEffect(() => {
+    if (!id) return;
+
     axios
       .get(`/users/${id}`, { withCredentials: true })
       .then((res) => {
@@ -67,8 +71,13 @@ function ContentContianer() {
 
   return (
     <div className="content">
-      {userInfo && id && <div className="background"></div>}
-      {userInfo && id && <UserInfo />}
+      {menu === "friends" && userInfo && id && (
+        <>
+          <div className="background"></div>
+          <UserInfo />
+        </>
+      )}
+      {menu === "chats" && userInfo && id && <ChatRoom />}
     </div>
   );
 }
