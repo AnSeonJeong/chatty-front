@@ -11,16 +11,13 @@ function ChatList(chatProps: ChatProps) {
   const chatFilePath = "/uploads/chat/documents";
   const baseUrl = "http://localhost:3000";
 
-  const messages = (
-    text: string,
-    image: string,
-    path: string,
-    file: string
-  ) => {
+  const messages = (text: string, image: string, file: string) => {
     return (
       <>
         {text && <>{text}</>}
-        {image && <img src={`${baseUrl}${path}/${image}`} alt="chat-image" />}
+        {image && (
+          <img src={`${baseUrl}${chatImgPath}/${image}`} alt="chat-image" />
+        )}
         {file && (
           <a href={`${baseUrl}${chatFilePath}/${file}`} download>
             Download File
@@ -41,21 +38,17 @@ function ChatList(chatProps: ChatProps) {
             {isSender ? (
               <div className="chat_sender">
                 <div className="user_profile">
-                  <img
-                    src={`http://localhost:3000/uploads/user-profiles/${profile}`}
-                  />
+                  <img src={`${baseUrl}${profilePath}/${profile}`} />
                 </div>
                 <div className="user_msg">
                   <span>{nickname}</span>
                   <span className="received">
-                    {messages(text, image, profilePath, file)}
+                    {messages(text, image, file)}
                   </span>
                 </div>
               </div>
             ) : (
-              <span className="sent">
-                {messages(text, image, chatImgPath, file)}
-              </span>
+              <span className="sent">{messages(text, image, file)}</span>
             )}
           </li>
         );
@@ -67,7 +60,7 @@ function ChatList(chatProps: ChatProps) {
         return (
           <li key={index}>
             <span className={isSender ? "sent" : "received"}>
-              {messages(message, image, chatImgPath, file)}
+              {messages(message, image, file)}
             </span>
           </li>
         );
