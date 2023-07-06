@@ -20,7 +20,7 @@ const ChatroomList = ({ dataList }: { dataList: ChatroomList[] }) => {
   return (
     <>
       {dataList.map((data, i) => (
-        <Link to={`/main/chats/${data.id}`} key={i}>
+        <Link to={`/main/chats/${data.id}?mem_id=${data.member_id}`} key={i}>
           <li className="chatroom_container">
             <div className="chat_into">
               <div className="profileImg">
