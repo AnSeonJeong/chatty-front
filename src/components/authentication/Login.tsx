@@ -3,13 +3,13 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 // css
-import "../styles/login.scss";
+import "../../styles/login.scss";
 
 // images
-import logo from "../assets/logo.png";
-import naver from "../assets/naver.png";
-import kakao from "../assets/kakao.png";
-import google from "../assets/google.png";
+import logo from "../../assets/logo.png";
+import naver from "../../assets/naver.png";
+import kakao from "../../assets/kakao.png";
+import google from "../../assets/google.png";
 
 function Login() {
   const [email, setEmail] = useState("");

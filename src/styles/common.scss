@@ -18,8 +18,8 @@ body {
 
 :root {
   --main-color: #fd9f28;
-  --dark-color: #242424;
-  --light-gray-color: #b1b1b1;
+  --dark-color: #2d2d2d;
+  --light-gray-color: #f1f1f1;
   --gray-color: #989898;
   --white-color: #fff;
 }
@@ -41,4 +41,23 @@ body {
 
 .redirect {
   text-align: center;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+button {
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+button:focus {
+  border: none;
+}
+
+a {
+  text-decoration: none;
 }

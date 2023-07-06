@@ -2,10 +2,10 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import "../styles/main.scss";
-import SideMenu from "../components/SideMenu";
-import Chats from "../components/Chats";
-import Friends from "../components/Friends";
-import Profile from "../components/Profile";
+import SideMenu from "../components/main/SideMenu";
+import Chats from "../components/main/Chats";
+import Friends from "../components/main/Friends";
+import Profile from "../components/main/Profile";
 
 function Main() {
   const history = useNavigate();
@@ -13,13 +13,24 @@ function Main() {
   const [profileUrl, setProfileUrl] = useState("");
   const [profile, setProfile] = useState("");
   const [email, setEmail] = useState("");
+  const [dataList, setDataList] = useState([]);
 
   const { menu } = useParams();
+
   const Content = () => {
     if (menu === "chats") return <Chats />;
-    else if (menu === "friends") return <Friends />;
+    else if (menu === "friends") return <Friends dataList={dataList} />;
     else if (menu === "profile") return <Profile />;
     else return null;
+  };
+
+  const fetchData = (menu) => {
+    axios
+      .get(`/main/${menu}`, { withCredentials: true })
+      .then((res) => {
+        setDataList(res.data);
+      })
+      .catch((err) => console.log(err));
   };
 
   useEffect(() => {
@@ -38,6 +49,10 @@ function Main() {
         history("/login");
       });
   }, []);
+
+  useEffect(() => {
+    fetchData(menu);
+  }, [menu]);
 
   return (
     <div className="main_wrap">

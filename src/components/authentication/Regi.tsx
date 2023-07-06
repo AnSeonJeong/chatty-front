@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
-import profile from "../assets/profile_none.png";
-import "../styles/regi.scss";
+import profile from "../../assets/profile_none.png";
+import "../../styles/regi.scss";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
