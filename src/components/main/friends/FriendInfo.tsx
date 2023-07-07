@@ -2,6 +2,8 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import profileNone from "../../../assets/profile_none.png";
+import { io } from "socket.io-client";
+import "../../../styles/friend_info.scss";
 
 function FriendInfo({ id }: { id: number }) {
   const [userInfo, setUserInfo] = useState<FriendList>({} as FriendList);
@@ -21,7 +23,31 @@ function FriendInfo({ id }: { id: number }) {
       .catch((err) => alert(err.response.data.error));
   };
 
-  const handleJoinRoom = () => {};
+  const handleJoinChatroom = async () => {
+    const res = await axios.get(`/chats/member/${id}`, {
+      withCredentials: true,
+    });
+
+    if (res.data) {
+      // 이미 채팅방이 있는 경우
+      console.log(res.data);
+      history(`/main/chats/${res.data}`);
+    } else {
+      // 채팅방이 없는 경우
+      const memberIds = [id];
+      const nicknames = [userInfo.nickname];
+
+      const data = {
+        memberIds: memberIds,
+        nicknames: nicknames,
+      };
+
+      const res = await axios.post("chats/chatroom", data, {
+        withCredentials: true,
+      });
+      history(`/main/chats/${res.data}`);
+    }
+  };
 
   useEffect(() => {
     if (!id) return;
@@ -59,7 +85,7 @@ function FriendInfo({ id }: { id: number }) {
           >
             {userInfo.isFriend ? "친구삭제" : "친구신청"}
           </button>
-          <button onClick={() => handleJoinRoom()}>채팅하기</button>
+          <button onClick={() => handleJoinChatroom()}>채팅하기</button>
         </div>
       </div>
     );
