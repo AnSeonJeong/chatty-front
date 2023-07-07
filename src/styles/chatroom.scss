@@ -18,13 +18,18 @@
       width: 200px;
     }
 
-    li > div {
+    ul > li {
       display: flex;
       flex-direction: column;
 
-      .chat_sender {
+      .chat_receiver {
         display: flex;
         margin-bottom: 10px;
+      }
+
+      .chat_sender {
+        align-self: end;
+        display: flex;
       }
 
       .user_profile {
@@ -55,6 +60,7 @@
 
       .chat_time {
         margin-top: auto;
+        margin-right: 10px;
         padding: 0;
         font-size: 12px;
       }
