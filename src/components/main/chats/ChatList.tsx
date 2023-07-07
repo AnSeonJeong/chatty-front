@@ -1,3 +1,5 @@
+import ChatItems from "./ChatItems";
+
 interface ChatProps {
   chatList: ChatList[];
   userId: number;
@@ -6,62 +8,46 @@ interface ChatProps {
 
 function ChatList(chatProps: ChatProps) {
   const { chatList, userId, chatMessages } = chatProps;
-  const profilePath = "/uploads/user-profiles";
-  const chatImgPath = "/uploads/chat/images";
-  const chatFilePath = "/uploads/chat/documents";
-  const baseUrl = "http://localhost:3000";
 
-  const messages = (text: string, image: string, file: string) => {
-    return (
-      <>
-        {text && <>{text}</>}
-        {image && (
-          <img src={`${baseUrl}${chatImgPath}/${image}`} alt="chat-image" />
-        )}
-        {file && (
-          <a href={`${baseUrl}${chatFilePath}/${file}`} download>
-            Download File
-          </a>
-        )}
-      </>
-    );
-  };
+  const combinedList = [...chatList, ...chatMessages];
+
+  // 메시지 목록을 날짜별로 그룹화
+  const { groupsByDate, dates } = groupChatListByDate(combinedList);
+
+  // 메시지를 날짜별로 그룹화하는 함수
+  function groupChatListByDate(chatList: (ChatList | ChatMsg)[]) {
+    const groups: { [key: string]: (ChatList | ChatMsg)[] } = {};
+    const dates: string[] = [];
+
+    chatList.forEach((chat) => {
+      const date = chat.createdAt.toLocaleString().split("T")[0];
+      if (!groups[date]) {
+        groups[date] = [];
+        dates.push(date);
+      }
+      groups[date].push(chat);
+    });
+
+    return { groupsByDate: Object.values(groups), dates: dates };
+  }
 
   return (
     <>
-      {chatList.map((chat, index) => {
-        const isSender = chat.sender_id !== userId;
-        const { profile, nickname, text, image, file } = chat;
+      {groupsByDate.map((group, index) => {
+        const chat_date = dates[index];
+        const newDate = new Date(chat_date);
+
+        const year = newDate.getFullYear();
+        const month = newDate.getMonth() + 1;
+        const date = newDate.getDate();
+        const day = newDate.getDay();
+
+        const weekdays = ["일", "월", "화", "수", "목", "금", "토"];
 
         return (
           <li key={index}>
-            {isSender ? (
-              <div className="chat_sender">
-                <div className="user_profile">
-                  <img src={`${baseUrl}${profilePath}/${profile}`} />
-                </div>
-                <div className="user_msg">
-                  <span>{nickname}</span>
-                  <span className="received">
-                    {messages(text, image, file)}
-                  </span>
-                </div>
-              </div>
-            ) : (
-              <span className="sent">{messages(text, image, file)}</span>
-            )}
-          </li>
-        );
-      })}
-      {chatMessages.map((msg, index) => {
-        const isSender = msg.sender_id !== userId;
-        const { message, image, file } = msg;
-
-        return (
-          <li key={index}>
-            <span className={isSender ? "sent" : "received"}>
-              {messages(message, image, file)}
-            </span>
+            <div className="chat_date">{`${year}년 ${month}월 ${date}일 ${weekdays[day]}요일`}</div>
+            <ChatItems group={group} userId={userId} />
           </li>
         );
       })}
