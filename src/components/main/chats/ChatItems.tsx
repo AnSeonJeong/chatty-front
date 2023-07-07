@@ -1,4 +1,5 @@
 import { memo } from "react";
+import profileNone from "../../../assets/profile_none.png";
 
 const ChatItems = memo(
   ({ group, userId }: { group: (ChatList | ChatMsg)[]; userId: number }) => {
@@ -46,7 +47,13 @@ const ChatItems = memo(
               {isSender ? (
                 <div className="chat_sender">
                   <div className="user_profile">
-                    <img src={`${baseUrl}${profilePath}/${profile}`} />
+                    <img
+                      src={
+                        profile
+                          ? `${baseUrl}${profilePath}/${profile}`
+                          : profileNone
+                      }
+                    />
                   </div>
                   <div className="user_msg">
                     <span>{nickname}</span>
