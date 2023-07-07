@@ -18,7 +18,7 @@ function Main() {
   const { menu } = useParams();
 
   const Content = () => {
-    if (menu === "chats") return <Chats />;
+    if (menu === "chats") return <Chats dataList={dataList} />;
     else if (menu === "friends") return <Friends dataList={dataList} />;
     else if (menu === "profile") return <Profile />;
     else return null;
@@ -26,7 +26,7 @@ function Main() {
 
   const fetchData = (menu) => {
     axios
-      .get(`/main/${menu}`, { withCredentials: true })
+      .get(`/${menu}`, { withCredentials: true })
       .then((res) => {
         setDataList(res.data);
       })
