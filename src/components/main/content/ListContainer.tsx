@@ -1,11 +1,11 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import profileNone from "../../../assets/profile_none.png";
 import { IconDefinition, faSearch } from "@fortawesome/free-solid-svg-icons";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import ChatroomList from "../chats/ChatroomList";
 import FriendList from "../friends/friendList";
+import "../../../styles/list_container.scss";
 
 interface Props {
   title: string;

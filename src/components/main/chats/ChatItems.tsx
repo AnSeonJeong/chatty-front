@@ -43,9 +43,9 @@ const ChatItems = memo(
           const { profile, nickname, text, image, file, createdAt } = chat;
 
           return (
-            <div key={chatIndex}>
+            <li key={chatIndex}>
               {isSender ? (
-                <div className="chat_sender">
+                <div className="chat_receiver">
                   <div className="user_profile">
                     <img
                       src={
@@ -64,9 +64,12 @@ const ChatItems = memo(
                   <span className="chat_time">{customDate(createdAt)}</span>
                 </div>
               ) : (
-                <span className="sent">{messages(text, image, file)}</span>
+                <div className="chat_sender">
+                  <span className="chat_time">{customDate(createdAt)}</span>
+                  <span className="sent">{messages(text, image, file)}</span>
+                </div>
               )}
-            </div>
+            </li>
           );
         })}
       </>

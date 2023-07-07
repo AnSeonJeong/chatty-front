@@ -45,10 +45,10 @@ function ChatList(chatProps: ChatProps) {
         const weekdays = ["일", "월", "화", "수", "목", "금", "토"];
 
         return (
-          <li key={index}>
+          <ul key={index}>
             <div className="chat_date">{`${year}년 ${month}월 ${date}일 ${weekdays[day]}요일`}</div>
             <ChatItems group={group} userId={userId} />
-          </li>
+          </ul>
         );
       })}
     </>
