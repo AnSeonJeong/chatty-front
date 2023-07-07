@@ -30,8 +30,12 @@ type ChatList = {
 };
 
 type ChatMsg = {
+  room_id: unmber;
   sender_id: number;
-  message: string;
+  nickname: string;
+  profile: string;
+  text: string;
   image: string;
   file: string;
+  createdAt: Date;
 };
