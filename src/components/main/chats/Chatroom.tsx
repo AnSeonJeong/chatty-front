@@ -18,7 +18,8 @@ const ChatRoom = () => {
   const [profile, setProfile] = useState("");
   const [userId, setUserId] = useState(0);
   const [prevRoomId, setPrevRoomId] = useState("");
-  const { id } = useParams();
+
+  const { id: roomId } = useParams();
   const mem_id = searchParam.get("mem_id") as string;
 
   const chatContainerRef = useRef<HTMLDivElement>(null);
@@ -38,19 +39,22 @@ const ChatRoom = () => {
   // 메시지 전송
   const handleSendMessage = async (e: any) => {
     e.preventDefault();
+    if (!message) {
+      alert("메시지를 입력해주세요.");
+      return;
+    }
     // http로 전송, 채팅 저장
     const formdata = new FormData();
-    // formdata.append("sender_id", mem_id);
     formdata.append("text", message);
 
-    const res = await axios.post(`/chats/${id}/message`, formdata, {
+    const res = await axios.post(`/chats/${roomId}/message`, formdata, {
       withCredentials: true,
     });
     console.log(res.data);
 
     // socket으로 전송
     socket.emit("send_message", {
-      roomId: id,
+      roomId: roomId,
       sender_id: userId,
       nickname: nickname,
       profile: profile,
@@ -64,7 +68,7 @@ const ChatRoom = () => {
     axios
       .all([
         axios.get("/main", { withCredentials: true }),
-        axios.get(`/chats/${id}`, { withCredentials: true }),
+        axios.get(`/chats/${roomId}`, { withCredentials: true }),
       ])
       .then(
         axios.spread((res1, res2) => {
@@ -76,7 +80,7 @@ const ChatRoom = () => {
           // chatroom
           // 채팅방 입장
           socket.emit("join_room", {
-            roomId: id,
+            roomId: roomId,
             memId: mem_id,
             userId: res1.data.id,
           });
@@ -103,20 +107,20 @@ const ChatRoom = () => {
       socket.off("new_message", handleNewMessage);
       socket.off("joined", handleJoined);
     };
-  }, [id]);
+  }, [roomId]);
 
   useEffect(() => {
     // 이전 채팅방에서 나가기
     return () => {
       if (userId !== 0 && prevRoomId !== "") {
         socket.emit("leave_room", {
-          roomId: id,
+          roomId: roomId,
           memId: mem_id,
           userId: userId,
         });
       }
     };
-  }, [id, prevRoomId]);
+  }, [roomId]);
 
   return (
     <div className="chatroom_container" ref={chatContainerRef}>
