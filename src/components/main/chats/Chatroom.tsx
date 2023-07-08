@@ -17,12 +17,13 @@ const ChatRoom = () => {
   const [nickname, setNickname] = useState("");
   const [profile, setProfile] = useState("");
   const [userId, setUserId] = useState(0);
+  const [prevRoomId, setPrevRoomId] = useState("");
   const { id } = useParams();
   const mem_id = searchParam.get("mem_id") as string;
 
-  // 스크롤 맨 아래로 자동 이동
   const chatContainerRef = useRef<HTMLDivElement>(null);
 
+  // 스크롤 맨 아래로 자동 이동
   useEffect(() => {
     scrollToBottom();
   }, [chatList, chatMessages]);
@@ -81,8 +82,6 @@ const ChatRoom = () => {
           });
           // 이전 채팅 기록
           setChatList(res2.data);
-
-          socket.on("joined", (data) => console.log("joined : ", data));
         })
       )
       .catch((err) => console.log(err));
@@ -92,12 +91,32 @@ const ChatRoom = () => {
       setChatMessages((prevMessages) => [...prevMessages, data]);
     };
 
+    // joined 이벤트 핸들러 등록
+    const handleJoined = (data: any) => {
+      setPrevRoomId(data.roomId);
+    };
+
     socket.on("new_message", handleNewMessage);
+    socket.on("joined", handleJoined);
 
     return () => {
       socket.off("new_message", handleNewMessage);
+      socket.off("joined", handleJoined);
     };
-  }, []);
+  }, [id]);
+
+  useEffect(() => {
+    // 이전 채팅방에서 나가기
+    return () => {
+      if (userId !== 0 && prevRoomId !== "") {
+        socket.emit("leave_room", {
+          roomId: id,
+          memId: mem_id,
+          userId: userId,
+        });
+      }
+    };
+  }, [id, prevRoomId]);
 
   return (
     <div className="chatroom_container" ref={chatContainerRef}>
