@@ -1,13 +1,15 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import profileNone from "../../../assets/profile_none.png";
 import { IconDefinition, faSearch } from "@fortawesome/free-solid-svg-icons";
-import { Link } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import ChatroomList from "../chats/ChatroomList";
+import FriendList from "../friends/friendList";
+import "../../../styles/list_container.scss";
 
 interface Props {
   title: string;
-  dataList: FriendList[];
+  dataList: FriendList[] | ChatroomList[];
   icon: IconDefinition;
 }
 
@@ -15,38 +17,19 @@ function ListContainer(props: Props) {
   const { title, dataList, icon } = props;
   const [search, setSearch] = useState("");
   const [isClicked, setIsClicked] = useState(false);
-  const [friendListData, setFriendListData] = useState<FriendList[]>(dataList);
+  const [listData, setListData] = useState<FriendList[] | ChatroomList[]>(
+    dataList
+  );
+
+  const { menu } = useParams();
 
   useEffect(() => {
-    if (!isClicked) setFriendListData(dataList);
+    if (!isClicked) setListData(dataList);
   });
-
-  const friendList = (dataList: FriendList[]) => {
-    return (
-      <>
-        {dataList.map((data, i) => (
-          <Link to={`/main/friends/${data.id}`} key={i}>
-            <li>
-              <div className="profileImg">
-                <img
-                  src={data.profile ? data.profileUrl : profileNone}
-                  alt={data.nickname}
-                />
-              </div>
-              <div className="user_info">
-                <span>{data.nickname}</span>
-                <span>{data.intro}</span>
-              </div>
-            </li>
-          </Link>
-        ))}
-      </>
-    );
-  };
 
   const handleAddFriendsBtn = () => {
     setIsClicked(!isClicked);
-    setFriendListData([]);
+    setListData([]);
   };
 
   const handleSearchUsers = (nickname: string) => {
@@ -56,7 +39,7 @@ function ListContainer(props: Props) {
         .get(`/users/search/${nickname}`, { withCredentials: true })
         .then((res) => {
           console.log(res);
-          setFriendListData(res.data);
+          setListData(res.data);
         })
         .catch((err) => console.log(err));
     }
@@ -80,10 +63,18 @@ function ListContainer(props: Props) {
           <FontAwesomeIcon icon={faSearch} />
         </button>
       </div>
-      {dataList.length > 0 ? (
-        <ul className="info">{friendList(friendListData)}</ul>
+      {dataList && dataList.length > 0 ? (
+        <ul className="info">
+          {menu === "friends" ? (
+            <FriendList dataList={listData as FriendList[]} />
+          ) : (
+            <ChatroomList dataList={listData as ChatroomList[]} />
+          )}
+        </ul>
       ) : (
-        <div className="empty_text">친구 목록이 비었습니다.</div>
+        <div className="empty_text">{`${
+          menu === "friends" ? "친구" : "채팅"
+        } 목록이 비어있습니다.`}</div>
       )}
     </div>
   );

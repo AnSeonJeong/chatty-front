@@ -1,0 +1,123 @@
+.container {
+  .list-content {
+    width: 450px;
+    padding: 50px 0;
+    box-sizing: border-box;
+
+    .title {
+      display: flex;
+      justify-content: space-between;
+      padding: 0 50px;
+
+      h2 {
+        font-weight: bolder;
+      }
+
+      .btnIcon {
+        height: 20px;
+        cursor: pointer;
+      }
+    }
+
+    .search-container {
+      height: 32px;
+      border-radius: 8px;
+      margin: 10px 50px;
+      background-color: #f0f0f0;
+      display: flex;
+      justify-content: space-between;
+
+      input,
+      input:focus {
+        width: 100%;
+        border: none;
+        outline: none;
+        background-color: transparent;
+        line-height: 32px;
+        margin-left: 8px;
+      }
+
+      button {
+        margin-right: 8px;
+      }
+    }
+
+    .empty_text {
+      text-align: center;
+      margin-top: 300px;
+    }
+
+    .info {
+      a {
+        color: var(--dark-color);
+      }
+
+      .friend_container {
+        display: flex;
+      }
+
+      .chatroom_container {
+        display: flex;
+        justify-content: space-between;
+      }
+
+      li {
+        padding: 20px 50px;
+        cursor: pointer;
+
+        .profileImg {
+          width: 70px;
+          height: 70px;
+          border-radius: 50%;
+          overflow: hidden;
+          position: relative;
+
+          img {
+            height: 100%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: var(--white-color);
+          }
+        }
+
+        .chat_into {
+          display: flex;
+        }
+
+        .date {
+          display: flex;
+          flex-direction: column;
+          margin-top: 15px;
+          // justify-content: center;
+
+          span:first-child {
+            font-size: 14px;
+            color: var(--gray-color);
+          }
+        }
+
+        .user_info {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          margin-left: 25px;
+
+          span:first-child {
+            font-weight: bold;
+          }
+
+          span:last-child {
+            font-size: 14px;
+            margin-top: 8px;
+          }
+        }
+      }
+
+      li:hover {
+        background-color: #f8f8f8;
+      }
+    }
+  }
+}

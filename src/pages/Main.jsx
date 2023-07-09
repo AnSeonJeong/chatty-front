@@ -17,16 +17,10 @@ function Main() {
 
   const { menu } = useParams();
 
-  const Content = () => {
-    if (menu === "chats") return <Chats />;
-    else if (menu === "friends") return <Friends dataList={dataList} />;
-    else if (menu === "profile") return <Profile />;
-    else return null;
-  };
-
   const fetchData = (menu) => {
+    console.log("fetch data");
     axios
-      .get(`/main/${menu}`, { withCredentials: true })
+      .get(`/${menu}`, { withCredentials: true })
       .then((res) => {
         setDataList(res.data);
       })
@@ -62,7 +56,13 @@ function Main() {
         email={email}
         profileUrl={profileUrl}
       />
-      <Content />
+      {menu === "chats" ? (
+        <Chats dataList={dataList} />
+      ) : menu === "friends" ? (
+        <Friends dataList={dataList} />
+      ) : menu === "profile" ? (
+        <Profile />
+      ) : null}
     </div>
   );
 }

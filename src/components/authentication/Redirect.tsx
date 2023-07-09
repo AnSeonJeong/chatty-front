@@ -18,7 +18,7 @@ function Redirect() {
         const token = res.data;
         axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
         // 메인 페이지로 이동
-        history("/main");
+        history("/main/chats");
       }
     })
     .catch((err) => {

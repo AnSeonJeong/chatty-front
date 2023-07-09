@@ -1,0 +1,139 @@
+.chatroom_container {
+  overflow: auto;
+
+  .chats {
+    height: 83vh;
+  }
+
+  .chatting_list {
+    margin: 50px 50px 0 50px;
+
+    .chat_date {
+      text-align: center;
+      // background-color: var(--main-color);
+      // color: var(--white-color);
+      // border-radius: 20px;
+      padding: 5px;
+      margin: 40px auto;
+      width: 200px;
+    }
+
+    ul > li {
+      display: flex;
+      flex-direction: column;
+
+      .chat_receiver {
+        display: flex;
+        margin-bottom: 10px;
+      }
+
+      .chat_sender {
+        align-self: end;
+        display: flex;
+      }
+
+      .user_profile {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        overflow: hidden;
+        position: relative;
+
+        img {
+          height: 100%;
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          background-color: var(--white-color);
+        }
+      }
+
+      .user_msg {
+        span:first-child {
+          padding: 10px 0;
+        }
+        span {
+          margin: 0 10px;
+        }
+      }
+
+      .chat_time {
+        margin-top: auto;
+        margin-right: 10px;
+        padding: 0;
+        font-size: 12px;
+      }
+    }
+
+    span {
+      display: block;
+      width: fit-content;
+      white-space: nowrap;
+      border-radius: 10px;
+      padding: 10px;
+      margin: 5px 0;
+    }
+
+    .sent {
+      align-self: flex-end;
+      background-color: var(--white-color);
+    }
+
+    .received {
+      align-self: flex-start;
+
+      background-color: var(--dark-color);
+      color: var(--white-color);
+    }
+  }
+
+  form {
+    width: 100%;
+    position: absolute;
+    bottom: 38px;
+    left: 0;
+    right: 0;
+    text-align: center;
+
+    button {
+      .icon {
+        height: 20px;
+      }
+    }
+
+    .attach_image_btn {
+      margin-right: 15px;
+    }
+
+    .emoticon {
+      .icon {
+        color: var(--gray-color);
+        position: absolute;
+        right: 129px;
+        bottom: 12px;
+      }
+    }
+
+    input[type="text"],
+    input[type="text"]:focus {
+      width: 70%;
+      outline: none;
+      border: none;
+      height: 50px;
+      border-radius: 10px;
+      padding: 0 18px;
+      margin: 0 20px;
+    }
+
+    input[type="submit"] {
+      border: none;
+      height: 50px;
+      background-color: var(--dark-color);
+      color: var(--white-color);
+      border-radius: 10px;
+      padding: 10px 20px;
+      cursor: pointer;
+    }
+  }
+}
