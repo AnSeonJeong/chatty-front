@@ -2,7 +2,7 @@ import { memo } from "react";
 import profileNone from "../../../assets/profile_none.png";
 
 const ChatItems = memo(
-  ({ group, userId }: { group: (ChatList | ChatMsg)[]; userId: number }) => {
+  ({ group, userId }: { group: ChatList[]; userId: number }) => {
     const profilePath = "/uploads/user-profiles";
     const chatImgPath = "/uploads/chat/images";
     const chatFilePath = "/uploads/chat/documents";
