@@ -12,7 +12,7 @@ const ChatRoom = () => {
   const socket = io("http://localhost:3000");
   const [message, setMessage] = useState("");
   const [searchParam, setSearchParam] = useSearchParams();
-  const [chatMessages, setChatMessages] = useState<ChatMsg[]>([]);
+  const [chatMessages, setChatMessages] = useState<ChatList[]>([]);
   const [chatList, setChatList] = useState<ChatList[]>([]);
   const [nickname, setNickname] = useState("");
   const [profile, setProfile] = useState("");
@@ -52,15 +52,24 @@ const ChatRoom = () => {
     });
     console.log(res.data);
 
-    // socket으로 전송
-    socket.emit("send_message", {
-      roomId: roomId,
+    // 새로운 메시지를 생성
+    const newMessage: ChatList = {
+      chat_id: chatList.length + 1,
+      room_id: parseInt(roomId!),
       sender_id: userId,
       nickname: nickname,
       profile: profile,
       text: message,
+      file: "",
+      image: "",
       createdAt: new Date(),
-    });
+    };
+
+    // 기존의 chatList 배열에 새로운 메시지를 추가하여 업데이트
+    setChatList((prevChatList) => [...prevChatList, newMessage]);
+
+    // socket으로 전송
+    socket.emit("send_message", newMessage);
     setMessage("");
   };
 
@@ -91,7 +100,7 @@ const ChatRoom = () => {
       .catch((err) => console.log(err));
 
     // 채팅 메시지 추가
-    const handleNewMessage = (data: ChatMsg) => {
+    const handleNewMessage = (data: ChatList) => {
       setChatMessages((prevMessages) => [...prevMessages, data]);
     };
 
