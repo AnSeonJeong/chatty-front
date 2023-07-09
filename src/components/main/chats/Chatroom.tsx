@@ -18,6 +18,7 @@ const ChatRoom = () => {
   const [profile, setProfile] = useState("");
   const [userId, setUserId] = useState(0);
   const [prevRoomId, setPrevRoomId] = useState("");
+  const [chatListLen, setChatListLen] = useState(0);
 
   const { id: roomId } = useParams();
   const mem_id = searchParam.get("mem_id") as string;
@@ -54,7 +55,7 @@ const ChatRoom = () => {
 
     // 새로운 메시지를 생성
     const newMessage: ChatList = {
-      chat_id: chatList.length + 1,
+      chat_id: chatListLen + 1,
       room_id: parseInt(roomId!),
       sender_id: userId,
       nickname: nickname,
@@ -65,8 +66,8 @@ const ChatRoom = () => {
       createdAt: new Date(),
     };
 
-    // 기존의 chatList 배열에 새로운 메시지를 추가하여 업데이트
-    setChatList((prevChatList) => [...prevChatList, newMessage]);
+    // chatListLen 1씩 증가
+    setChatListLen((prevLen) => prevLen + 1);
 
     // socket으로 전송
     socket.emit("send_message", newMessage);
@@ -95,12 +96,16 @@ const ChatRoom = () => {
           });
           // 이전 채팅 기록
           setChatList(res2.data);
+
+          // chatListLen 초기값 설정
+          setChatListLen(res2.data.length);
         })
       )
       .catch((err) => console.log(err));
 
     // 채팅 메시지 추가
     const handleNewMessage = (data: ChatList) => {
+      console.log("handleNewMessage ", data);
       setChatMessages((prevMessages) => [...prevMessages, data]);
     };
 
