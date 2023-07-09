@@ -66,9 +66,6 @@ const ChatRoom = () => {
       createdAt: new Date(),
     };
 
-    // chatListLen 1씩 증가
-    setChatListLen((prevLen) => prevLen + 1);
-
     // socket으로 전송
     socket.emit("send_message", newMessage);
     setMessage("");
@@ -105,7 +102,8 @@ const ChatRoom = () => {
 
     // 채팅 메시지 추가
     const handleNewMessage = (data: ChatList) => {
-      console.log("handleNewMessage ", data);
+      // chatListLen 1씩 증가
+      setChatListLen((prevLen) => prevLen + 1);
       setChatMessages((prevMessages) => [...prevMessages, data]);
     };
 
