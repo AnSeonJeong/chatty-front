@@ -1,31 +1,41 @@
+import { useParams } from "react-router-dom";
 import ChatItems from "./ChatItems";
 
 interface ChatProps {
   chatList: ChatList[];
   userId: number;
-  chatMessages: ChatMsg[];
+  chatMessages: ChatList[];
 }
 
 function ChatList(chatProps: ChatProps) {
   const { chatList, userId, chatMessages } = chatProps;
+  const { id: roomId } = useParams();
 
-  const combinedList = [...chatList, ...chatMessages];
+  const filteredChatMessages = chatMessages.filter(
+    (msg) => msg.room_id === parseInt(roomId!)
+  );
+
+  const combinedList = [...chatList, ...filteredChatMessages];
 
   // 메시지 목록을 날짜별로 그룹화
   const { groupsByDate, dates } = groupChatListByDate(combinedList);
 
   // 메시지를 날짜별로 그룹화하는 함수
-  function groupChatListByDate(chatList: (ChatList | ChatMsg)[]) {
-    const groups: { [key: string]: (ChatList | ChatMsg)[] } = {};
+  function groupChatListByDate(chatList: ChatList[]) {
+    const groups: { [key: string]: ChatList[] } = {};
     const dates: string[] = [];
 
     chatList.forEach((chat) => {
-      const date = chat.createdAt.toLocaleString().split("T")[0];
+      const date = new Date(chat.createdAt).toISOString().split("T")[0];
+
       if (!groups[date]) {
         groups[date] = [];
         dates.push(date);
       }
-      groups[date].push(chat);
+      // chat_id가 일치하지 않는 요소만 그룹에 추가
+      if (!groups[date].some((c) => c.chat_id === chat.chat_id)) {
+        groups[date].push(chat);
+      }
     });
 
     return { groupsByDate: Object.values(groups), dates: dates };
