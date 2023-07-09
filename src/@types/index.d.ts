@@ -28,14 +28,3 @@ type ChatList = {
   profile: string;
   text: string;
 };
-
-type ChatMsg = {
-  room_id: unmber;
-  sender_id: number;
-  nickname: string;
-  profile: string;
-  text: string;
-  image: string;
-  file: string;
-  createdAt: Date;
-};
