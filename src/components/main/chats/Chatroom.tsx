@@ -54,6 +54,15 @@ const ChatRoom = () => {
     });
     console.log(res.data);
 
+    sendNewMessageToSocket(message, null, null);
+    setMessage("");
+  };
+
+  const sendNewMessageToSocket = (
+    message: string | null,
+    image: string | null,
+    file: string | null
+  ) => {
     // 새로운 메시지를 생성
     const newMessage: ChatList = {
       chat_id: chatListLen + 1,
@@ -62,14 +71,13 @@ const ChatRoom = () => {
       nickname: nickname,
       profile: profile,
       text: message,
-      file: "",
-      image: "",
+      file: file,
+      image: image,
       createdAt: new Date(),
     };
 
     // socket으로 전송
     socket.emit("send_message", newMessage);
-    setMessage("");
   };
 
   useEffect(() => {
@@ -151,7 +159,11 @@ const ChatRoom = () => {
         .post(`/chats/${roomId}/uploadImage`, formdata, {
           withCredentials: true,
         })
-        .then((res) => console.log(res))
+        .then((res) => {
+          // 실시간 이미지 파일 전송
+          const chatImage = res.data;
+          sendNewMessageToSocket(null, chatImage, null);
+        })
         .catch((err) => console.log(err));
     }
   };
