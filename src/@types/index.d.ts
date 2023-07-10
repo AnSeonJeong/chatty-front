@@ -22,9 +22,9 @@ type ChatList = {
   room_id: number;
   sender_id: number;
   createdAt: Date;
-  file: string;
-  image: string;
+  file: string | null;
+  image: string | null;
   nickname: string;
   profile: string;
-  text: string;
+  text: string | null;
 };

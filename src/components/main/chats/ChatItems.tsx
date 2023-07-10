@@ -20,7 +20,11 @@ const ChatItems = memo(
     };
 
     // 텍스트, 이미지, 파일 메시지 렌더링
-    const messages = (text: string, image: string, file: string) => {
+    const messages = (
+      text: string | null,
+      image: string | null,
+      file: string | null
+    ) => {
       return (
         <>
           {text && <>{text}</>}
