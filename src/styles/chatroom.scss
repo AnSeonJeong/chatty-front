@@ -75,6 +75,15 @@
       margin: 5px 0;
     }
 
+    .sent,
+    .received {
+      max-width: 500px;
+
+      img {
+        width: 100%;
+      }
+    }
+
     .sent {
       align-self: flex-end;
       background-color: var(--white-color);
@@ -100,6 +109,19 @@
       .icon {
         height: 20px;
       }
+    }
+
+    label {
+      cursor: pointer;
+      color: var(--dark-color);
+    }
+
+    label:hover {
+      color: var(--main-color);
+    }
+
+    input[type="file"] {
+      display: none;
     }
 
     .attach_image_btn {
