@@ -54,14 +54,15 @@ const ChatRoom = () => {
     });
     console.log(res.data);
 
-    sendNewMessageToSocket(message, null, null);
+    sendNewMessageToSocket(message, null, null, null);
     setMessage("");
   };
 
   const sendNewMessageToSocket = (
     message: string | null,
     image: string | null,
-    file: string | null
+    document: string | null,
+    originalDocName: string | null
   ) => {
     // 새로운 메시지를 생성
     const newMessage: ChatList = {
@@ -71,7 +72,8 @@ const ChatRoom = () => {
       nickname: nickname,
       profile: profile,
       text: message,
-      file: file,
+      documnet: document,
+      originalDocName: originalDocName,
       image: image,
       createdAt: new Date(),
     };
@@ -164,8 +166,13 @@ const ChatRoom = () => {
           const chatFile = res.data;
           console.log("chatFile=", chatFile);
           uploadType === "uploadImage"
-            ? sendNewMessageToSocket(null, chatFile, null)
-            : sendNewMessageToSocket(null, null, chatFile.document);
+            ? sendNewMessageToSocket(null, chatFile, null, null)
+            : sendNewMessageToSocket(
+                null,
+                null,
+                chatFile.document,
+                chatFile.originalDocName
+              );
         })
         .catch((err) => console.log(err));
     }

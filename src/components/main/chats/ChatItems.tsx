@@ -23,7 +23,8 @@ const ChatItems = memo(
     const messages = (
       text: string | null,
       image: string | null,
-      file: string | null
+      documnet: string | null,
+      originalDocName: string | null
     ) => {
       return (
         <>
@@ -31,9 +32,9 @@ const ChatItems = memo(
           {image && (
             <img src={`${baseUrl}${chatImgPath}/${image}`} alt="chat-image" />
           )}
-          {file && (
-            <a href={`${baseUrl}${chatFilePath}/${file}`} download>
-              Download File
+          {documnet && (
+            <a href={`${baseUrl}${chatFilePath}/${documnet}`} download>
+              {originalDocName}
             </a>
           )}
         </>
@@ -44,7 +45,15 @@ const ChatItems = memo(
       <>
         {group.map((chat, chatIndex) => {
           const isSender = chat.sender_id !== userId;
-          const { profile, nickname, text, image, file, createdAt } = chat;
+          const {
+            profile,
+            nickname,
+            text,
+            image,
+            documnet,
+            originalDocName,
+            createdAt,
+          } = chat;
 
           return (
             <li key={chatIndex}>
@@ -62,7 +71,7 @@ const ChatItems = memo(
                   <div className="user_msg">
                     <span>{nickname}</span>
                     <span className="received">
-                      {messages(text, image, file)}
+                      {messages(text, image, documnet, originalDocName)}
                     </span>
                   </div>
                   <span className="chat_time">{customDate(createdAt)}</span>
@@ -70,7 +79,9 @@ const ChatItems = memo(
               ) : (
                 <div className="chat_sender">
                   <span className="chat_time">{customDate(createdAt)}</span>
-                  <span className="sent">{messages(text, image, file)}</span>
+                  <span className="sent">
+                    {messages(text, image, documnet, originalDocName)}
+                  </span>
                 </div>
               )}
             </li>
