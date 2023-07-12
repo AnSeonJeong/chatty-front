@@ -72,7 +72,7 @@ const ChatRoom = () => {
       nickname: nickname,
       profile: profile,
       text: message,
-      documnet: document,
+      document: document,
       originalDocName: originalDocName,
       image: image,
       createdAt: new Date(),

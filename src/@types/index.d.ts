@@ -22,7 +22,7 @@ type ChatList = {
   room_id: number;
   sender_id: number;
   createdAt: Date;
-  documnet: string | null;
+  document: string | null;
   originalDocName: strung | null;
   image: string | null;
   nickname: string;

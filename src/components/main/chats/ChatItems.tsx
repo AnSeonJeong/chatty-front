@@ -50,7 +50,7 @@ const ChatItems = memo(
             nickname,
             text,
             image,
-            documnet,
+            document,
             originalDocName,
             createdAt,
           } = chat;
@@ -71,7 +71,7 @@ const ChatItems = memo(
                   <div className="user_msg">
                     <span>{nickname}</span>
                     <span className="received">
-                      {messages(text, image, documnet, originalDocName)}
+                      {messages(text, image, document, originalDocName)}
                     </span>
                   </div>
                   <span className="chat_time">{customDate(createdAt)}</span>
@@ -80,7 +80,7 @@ const ChatItems = memo(
                 <div className="chat_sender">
                   <span className="chat_time">{customDate(createdAt)}</span>
                   <span className="sent">
-                    {messages(text, image, documnet, originalDocName)}
+                    {messages(text, image, document, originalDocName)}
                   </span>
                 </div>
               )}
