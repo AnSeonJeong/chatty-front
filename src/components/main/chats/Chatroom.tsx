@@ -25,6 +25,7 @@ const ChatRoom = () => {
 
   const chatContainerRef = useRef<HTMLDivElement>(null);
   const imgRef = useRef<HTMLInputElement>(null);
+  const docRef = useRef<HTMLInputElement>(null);
 
   // 스크롤 맨 아래로 자동 이동
   useEffect(() => {
@@ -143,26 +144,29 @@ const ChatRoom = () => {
     };
   }, [roomId]);
 
-  // 이미지 파일 업로드
-  const handleImageUpload = () => {
+  // 이미지, 문서 파일 업로드
+  const handleUpload = (uploadType: string, field: string) => {
     if (
       imgRef.current &&
       imgRef.current.files &&
       imgRef.current.files.length > 0
     ) {
-      const chatImage = imgRef.current.files[0];
+      let chatFile = imgRef.current.files[0];
 
       let formdata = new FormData();
-      formdata.append("chatImage", chatImage);
-
+      formdata.append(field, chatFile);
+      console.log(uploadType, field);
       axios
-        .post(`/chats/${roomId}/uploadImage`, formdata, {
+        .post(`/chats/${roomId}/${uploadType}`, formdata, {
           withCredentials: true,
         })
         .then((res) => {
-          // 실시간 이미지 파일 전송
-          const chatImage = res.data;
-          sendNewMessageToSocket(null, chatImage, null);
+          // 실시간 파일 전송
+          const chatFile = res.data;
+          console.log("chatFile=", chatFile);
+          uploadType === "uploadImage"
+            ? sendNewMessageToSocket(null, chatFile, null)
+            : sendNewMessageToSocket(null, null, chatFile);
         })
         .catch((err) => console.log(err));
     }
@@ -193,11 +197,18 @@ const ChatRoom = () => {
           accept="image/*"
           name="chatImage"
           ref={imgRef}
-          onChange={handleImageUpload}
+          onChange={() => handleUpload("uploadImage", "chatImage")}
         />
-        <button className="attach_document_btn">
+        <label htmlFor="chat_document">
           <FontAwesomeIcon className="icon" icon={faPaperclip} />
-        </button>
+        </label>
+        <input
+          type="file"
+          id="chat_document"
+          name="chatDocument"
+          ref={imgRef}
+          onChange={() => handleUpload("uploadDocument", "chatDocument")}
+        />
         <input
           type="text"
           value={message}
