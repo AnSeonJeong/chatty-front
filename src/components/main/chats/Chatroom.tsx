@@ -24,6 +24,7 @@ const ChatRoom = () => {
   const mem_id = searchParam.get("mem_id") as string;
 
   const chatContainerRef = useRef<HTMLDivElement>(null);
+  const imgRef = useRef<HTMLInputElement>(null);
 
   // 스크롤 맨 아래로 자동 이동
   useEffect(() => {
@@ -53,6 +54,15 @@ const ChatRoom = () => {
     });
     console.log(res.data);
 
+    sendNewMessageToSocket(message, null, null);
+    setMessage("");
+  };
+
+  const sendNewMessageToSocket = (
+    message: string | null,
+    image: string | null,
+    file: string | null
+  ) => {
     // 새로운 메시지를 생성
     const newMessage: ChatList = {
       chat_id: chatListLen + 1,
@@ -61,14 +71,13 @@ const ChatRoom = () => {
       nickname: nickname,
       profile: profile,
       text: message,
-      file: "",
-      image: "",
+      file: file,
+      image: image,
       createdAt: new Date(),
     };
 
     // socket으로 전송
     socket.emit("send_message", newMessage);
-    setMessage("");
   };
 
   useEffect(() => {
@@ -134,6 +143,31 @@ const ChatRoom = () => {
     };
   }, [roomId]);
 
+  // 이미지 파일 업로드
+  const handleImageUpload = () => {
+    if (
+      imgRef.current &&
+      imgRef.current.files &&
+      imgRef.current.files.length > 0
+    ) {
+      const chatImage = imgRef.current.files[0];
+
+      let formdata = new FormData();
+      formdata.append("chatImage", chatImage);
+
+      axios
+        .post(`/chats/${roomId}/uploadImage`, formdata, {
+          withCredentials: true,
+        })
+        .then((res) => {
+          // 실시간 이미지 파일 전송
+          const chatImage = res.data;
+          sendNewMessageToSocket(null, chatImage, null);
+        })
+        .catch((err) => console.log(err));
+    }
+  };
+
   return (
     <div className="chatroom_container" ref={chatContainerRef}>
       <div className="chats">
@@ -150,9 +184,17 @@ const ChatRoom = () => {
         onSubmit={handleSendMessage}
         encType="multipart/form-data"
       >
-        <button className="attach_image_btn">
+        <label htmlFor="chat_image">
           <FontAwesomeIcon className="icon" icon={faImage} />
-        </button>
+        </label>
+        <input
+          type="file"
+          id="chat_image"
+          accept="image/*"
+          name="chatImage"
+          ref={imgRef}
+          onChange={handleImageUpload}
+        />
         <button className="attach_document_btn">
           <FontAwesomeIcon className="icon" icon={faPaperclip} />
         </button>

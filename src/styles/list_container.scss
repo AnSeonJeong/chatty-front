@@ -103,6 +103,9 @@
           flex-direction: column;
           justify-content: center;
           margin-left: 25px;
+          width: 176px;
+          padding-right: 20px;
+          box-sizing: border-box;
 
           span:first-child {
             font-weight: bold;
@@ -111,6 +114,9 @@
           span:last-child {
             font-size: 14px;
             margin-top: 8px;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
           }
         }
       }
