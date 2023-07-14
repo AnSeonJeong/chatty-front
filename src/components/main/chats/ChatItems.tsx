@@ -1,7 +1,7 @@
 import { memo } from "react";
 import profileNone from "../../../assets/profile_none.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowDown } from "@fortawesome/free-solid-svg-icons";
+import { faArrowDown, faFolder } from "@fortawesome/free-solid-svg-icons";
 
 const ChatItems = memo(
   ({ group, userId }: { group: ChatList[]; userId: number }) => {
@@ -35,12 +35,12 @@ const ChatItems = memo(
             <img src={`${baseUrl}${chatImgPath}/${image}`} alt="chat-image" />
           )}
           {documnet && (
-            <>
+            <div className="download_container">
               <a href={`${baseUrl}${chatFilePath}/${documnet}`} download>
-                <FontAwesomeIcon icon={faArrowDown} />
+                <FontAwesomeIcon className="download_link" icon={faArrowDown} />
               </a>
               {originalDocName}
-            </>
+            </div>
           )}
         </>
       );
