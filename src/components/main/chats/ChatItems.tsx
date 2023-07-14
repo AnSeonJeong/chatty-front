@@ -28,6 +28,25 @@ const ChatItems = memo(
       documnet: string | null,
       originalDocName: string | null
     ) => {
+      // 파일 다운로드
+      const downloadDocument = async () => {
+        const url = `${baseUrl}${chatFilePath}/${documnet}`;
+        // 원본 파일명으로 저장되도록 설정
+        const fileName = originalDocName!;
+
+        const file = await fetch(url);
+        const blob = await file.blob();
+        const downloadUrl = URL.createObjectURL(blob);
+
+        const link = document.createElement("a");
+        link.download = fileName;
+        link.href = downloadUrl;
+        link.style.display = "none";
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+      };
+
       return (
         <>
           {text && <>{text}</>}
@@ -36,9 +55,9 @@ const ChatItems = memo(
           )}
           {documnet && (
             <div className="download_container">
-              <a href={`${baseUrl}${chatFilePath}/${documnet}`} download>
+              <button onClick={downloadDocument}>
                 <FontAwesomeIcon className="download_link" icon={faArrowDown} />
-              </a>
+              </button>
               {originalDocName}
             </div>
           )}
