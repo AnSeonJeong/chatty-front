@@ -1,5 +1,7 @@
 import { memo } from "react";
 import profileNone from "../../../assets/profile_none.png";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowDown, faFolder } from "@fortawesome/free-solid-svg-icons";
 
 const ChatItems = memo(
   ({ group, userId }: { group: ChatList[]; userId: number }) => {
@@ -23,18 +25,41 @@ const ChatItems = memo(
     const messages = (
       text: string | null,
       image: string | null,
-      file: string | null
+      documnet: string | null,
+      originalDocName: string | null
     ) => {
+      // 파일 다운로드
+      const downloadDocument = async () => {
+        const url = `${baseUrl}${chatFilePath}/${documnet}`;
+        // 원본 파일명으로 저장되도록 설정
+        const fileName = originalDocName!;
+
+        const file = await fetch(url);
+        const blob = await file.blob();
+        const downloadUrl = URL.createObjectURL(blob);
+
+        const link = document.createElement("a");
+        link.download = fileName;
+        link.href = downloadUrl;
+        link.style.display = "none";
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+      };
+
       return (
         <>
           {text && <>{text}</>}
           {image && (
             <img src={`${baseUrl}${chatImgPath}/${image}`} alt="chat-image" />
           )}
-          {file && (
-            <a href={`${baseUrl}${chatFilePath}/${file}`} download>
-              Download File
-            </a>
+          {documnet && (
+            <div className="download_container">
+              <button onClick={downloadDocument}>
+                <FontAwesomeIcon className="download_link" icon={faArrowDown} />
+              </button>
+              {originalDocName}
+            </div>
           )}
         </>
       );
@@ -44,7 +69,15 @@ const ChatItems = memo(
       <>
         {group.map((chat, chatIndex) => {
           const isSender = chat.sender_id !== userId;
-          const { profile, nickname, text, image, file, createdAt } = chat;
+          const {
+            profile,
+            nickname,
+            text,
+            image,
+            document,
+            originalDocName,
+            createdAt,
+          } = chat;
 
           return (
             <li key={chatIndex}>
@@ -62,7 +95,7 @@ const ChatItems = memo(
                   <div className="user_msg">
                     <span>{nickname}</span>
                     <span className="received">
-                      {messages(text, image, file)}
+                      {messages(text, image, document, originalDocName)}
                     </span>
                   </div>
                   <span className="chat_time">{customDate(createdAt)}</span>
@@ -70,7 +103,9 @@ const ChatItems = memo(
               ) : (
                 <div className="chat_sender">
                   <span className="chat_time">{customDate(createdAt)}</span>
-                  <span className="sent">{messages(text, image, file)}</span>
+                  <span className="sent">
+                    {messages(text, image, document, originalDocName)}
+                  </span>
                 </div>
               )}
             </li>

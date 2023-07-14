@@ -24,7 +24,7 @@ const ChatRoom = () => {
   const mem_id = searchParam.get("mem_id") as string;
 
   const chatContainerRef = useRef<HTMLDivElement>(null);
-  const imgRef = useRef<HTMLInputElement>(null);
+  const fileRef = useRef<HTMLInputElement>(null);
 
   // 스크롤 맨 아래로 자동 이동
   useEffect(() => {
@@ -54,14 +54,15 @@ const ChatRoom = () => {
     });
     console.log(res.data);
 
-    sendNewMessageToSocket(message, null, null);
+    sendNewMessageToSocket(message, null, null, null);
     setMessage("");
   };
 
   const sendNewMessageToSocket = (
     message: string | null,
     image: string | null,
-    file: string | null
+    document: string | null,
+    originalDocName: string | null
   ) => {
     // 새로운 메시지를 생성
     const newMessage: ChatList = {
@@ -71,7 +72,8 @@ const ChatRoom = () => {
       nickname: nickname,
       profile: profile,
       text: message,
-      file: file,
+      document: document,
+      originalDocName: originalDocName,
       image: image,
       createdAt: new Date(),
     };
@@ -143,26 +145,34 @@ const ChatRoom = () => {
     };
   }, [roomId]);
 
-  // 이미지 파일 업로드
-  const handleImageUpload = () => {
+  // 이미지, 문서 파일 업로드
+  const handleUpload = (uploadType: string, field: string) => {
     if (
-      imgRef.current &&
-      imgRef.current.files &&
-      imgRef.current.files.length > 0
+      fileRef.current &&
+      fileRef.current.files &&
+      fileRef.current.files.length > 0
     ) {
-      const chatImage = imgRef.current.files[0];
+      let chatFile = fileRef.current.files[0];
 
       let formdata = new FormData();
-      formdata.append("chatImage", chatImage);
-
+      formdata.append(field, chatFile);
+      console.log(uploadType, field);
       axios
-        .post(`/chats/${roomId}/uploadImage`, formdata, {
+        .post(`/chats/${roomId}/${uploadType}`, formdata, {
           withCredentials: true,
         })
         .then((res) => {
-          // 실시간 이미지 파일 전송
-          const chatImage = res.data;
-          sendNewMessageToSocket(null, chatImage, null);
+          // 실시간 파일 전송
+          const chatFile = res.data;
+          console.log("chatFile=", chatFile);
+          uploadType === "uploadImage"
+            ? sendNewMessageToSocket(null, chatFile, null, null)
+            : sendNewMessageToSocket(
+                null,
+                null,
+                chatFile.document,
+                chatFile.originalDocName
+              );
         })
         .catch((err) => console.log(err));
     }
@@ -192,12 +202,19 @@ const ChatRoom = () => {
           id="chat_image"
           accept="image/*"
           name="chatImage"
-          ref={imgRef}
-          onChange={handleImageUpload}
+          ref={fileRef}
+          onChange={() => handleUpload("uploadImage", "chatImage")}
         />
-        <button className="attach_document_btn">
+        <label htmlFor="chat_document">
           <FontAwesomeIcon className="icon" icon={faPaperclip} />
-        </button>
+        </label>
+        <input
+          type="file"
+          id="chat_document"
+          name="chatDocument"
+          ref={fileRef}
+          onChange={() => handleUpload("uploadDocument", "chatDocument")}
+        />
         <input
           type="text"
           value={message}
