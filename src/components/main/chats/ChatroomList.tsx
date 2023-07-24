@@ -72,7 +72,7 @@ const ChatroomList = ({ dataList }: { dataList: ChatroomList[] }) => {
                 <span>{data.lastMessage}</span>
               </div>
             </div>
-            <div className="date">
+            <div className="date_and_nocification">
               <span>{lastUpdatedAt(data.lastUpdatedAt)}</span>
               <span></span>
             </div>
