@@ -7,6 +7,10 @@ const ChatroomList = ({ dataList }: { dataList: ChatroomList[] }) => {
   const [filteredDataList, setFilteredDataList] =
     useState<ChatroomList[]>(dataList); // dataList를 상태로 관리
 
+  useEffect(() => {
+    setFilteredDataList(dataList);
+  }, [dataList]);
+
   function lastUpdatedAt(date: Date) {
     if (!date) return;
 
@@ -25,7 +29,6 @@ const ChatroomList = ({ dataList }: { dataList: ChatroomList[] }) => {
   useEffect(() => {
     const socket = io("http://localhost:3000");
 
-    console.log(filteredDataList);
     socket.on("new_message_copy", (data) => {
       const filteredMessage = dataList.filter(
         (msg) => msg.id === data.room_id
@@ -38,7 +41,6 @@ const ChatroomList = ({ dataList }: { dataList: ChatroomList[] }) => {
           lastMessage: data.text || data.image || data.originalDocName,
           lastUpdatedAt: data.createdAt,
         };
-        console.log("updatedMessage", updatedMessage);
         // 기존 배열에서 해당 메시지를 제외하고 맨 앞에 새로운 메시지를 추가
         const updatedList = [
           updatedMessage,
@@ -47,7 +49,7 @@ const ChatroomList = ({ dataList }: { dataList: ChatroomList[] }) => {
         setFilteredDataList(updatedList as ChatroomList[]);
       }
     });
-  }, [dataList]);
+  }, [filteredDataList]);
 
   return (
     <>
