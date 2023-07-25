@@ -84,7 +84,11 @@ const ChatroomList = ({
   return (
     <>
       {filteredDataList.map((data, i) => (
-        <Link to={`/main/chats/${data.id}?mem_id=${data.member_id}`} key={i}>
+        <Link
+          to={`/main/chats/${data.id}?mem_id=${data.member_id}`}
+          key={i}
+          onClick={() => (data.notification = 0)}
+        >
           <li className="chatroom_container">
             <div className="chat_into">
               <div className="profileImg">
