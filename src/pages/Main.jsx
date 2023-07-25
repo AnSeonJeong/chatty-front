@@ -13,6 +13,7 @@ function Main() {
   const [profileUrl, setProfileUrl] = useState("");
   const [profile, setProfile] = useState("");
   const [email, setEmail] = useState("");
+  const [userId, setUserId] = useState(0);
   const [dataList, setDataList] = useState([]);
 
   const { menu } = useParams();
@@ -36,6 +37,7 @@ function Main() {
         setProfile(res.data.profile);
         setNickname(res.data.nickname);
         setEmail(res.data.email);
+        setUserId(res.data.id);
       })
       .catch((err) => {
         console.log(err);
@@ -57,7 +59,7 @@ function Main() {
         profileUrl={profileUrl}
       />
       {menu === "chats" ? (
-        <Chats dataList={dataList} />
+        <Chats dataList={dataList} userId={userId} />
       ) : menu === "friends" ? (
         <Friends dataList={dataList} />
       ) : menu === "profile" ? (

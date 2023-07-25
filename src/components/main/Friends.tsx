@@ -5,7 +5,12 @@ import ContentContianer from "./content/ContentContainer";
 function Friends({ dataList }: { dataList: FriendList[] }) {
   return (
     <div className="container">
-      <ListContainer title="Friends" dataList={dataList} icon={faUserPlus} />
+      <ListContainer
+        title="Friends"
+        dataList={dataList}
+        userId={undefined}
+        icon={faUserPlus}
+      />
       <ContentContianer />
     </div>
   );
