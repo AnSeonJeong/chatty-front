@@ -15,6 +15,7 @@ type ChatroomList = {
   lastMessage: string; // 마지막 메시지
   lastUpdatedAt: Date; // 마지막 메시지를 보낸 날짜
   chatThumnail: string; // 채팅방 썸네일
+  notification: number;
 };
 
 type ChatList = {
