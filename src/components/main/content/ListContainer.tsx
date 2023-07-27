@@ -11,10 +11,11 @@ interface Props {
   title: string;
   dataList: FriendList[] | ChatroomList[];
   icon: IconDefinition;
+  userId: number | undefined;
 }
 
 function ListContainer(props: Props) {
-  const { title, dataList, icon } = props;
+  const { title, dataList, icon, userId } = props;
   const [search, setSearch] = useState("");
   const [isClicked, setIsClicked] = useState(false);
   const [listData, setListData] = useState<FriendList[] | ChatroomList[]>(
@@ -68,7 +69,10 @@ function ListContainer(props: Props) {
           {menu === "friends" ? (
             <FriendList dataList={listData as FriendList[]} />
           ) : (
-            <ChatroomList dataList={listData as ChatroomList[]} />
+            <ChatroomList
+              dataList={listData as ChatroomList[]}
+              userId={userId!}
+            />
           )}
         </ul>
       ) : (

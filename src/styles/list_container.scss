@@ -86,15 +86,28 @@
           display: flex;
         }
 
-        .date {
+        .date_and_nocification {
           display: flex;
           flex-direction: column;
-          margin-top: 15px;
-          // justify-content: center;
+          justify-content: center;
+          align-items: end;
 
           span:first-child {
             font-size: 14px;
             color: var(--gray-color);
+          }
+
+          span:last-child {
+            text-align: center;
+            padding: 2px 5px;
+            border-radius: 10px;
+            margin-top: 8px;
+            font-size: 13px;
+            color: var(--light-gray-color);
+          }
+
+          .bg_color {
+            background-color: #fc4538;
           }
         }
 
