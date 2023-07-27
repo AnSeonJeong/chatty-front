@@ -44,7 +44,11 @@ const ChatroomList = ({
     } else return lastDate[0];
   }
 
-  function initCounting(roomId: number, senderId: number) {
+  function initCounting(roomId: number, senderId: number, index: number) {
+    const newDataList = [...filteredDataList]; // dataList의 복사본을 생성
+    const data = newDataList[index];
+    data.notification = 0; // 해당 chatroom의 notification을 초기화
+
     const count = cntObj.find((obj) => obj[roomId]);
 
     if (count?.[roomId].sender_id === senderId) {
@@ -55,6 +59,7 @@ const ChatroomList = ({
             : obj;
         })
       );
+      setFilteredDataList(newDataList);
     }
   }
 
@@ -95,17 +100,19 @@ const ChatroomList = ({
     };
   }, [filteredDataList]);
 
+  // 채팅방에 입장할 경우, 채팅방에 입장한 상태인 경우 알림 초기화
+  useEffect(() => {
+    filteredDataList.map((data, i) => {
+      if (parseInt(id!) === data.id && data.notification > 0) {
+        initCounting(data.id, data.member_id, i);
+      }
+    });
+  }, [id, filteredDataList]);
+
   return (
     <>
       {filteredDataList.map((data, i) => (
-        <Link
-          to={`/main/chats/${data.id}?mem_id=${data.member_id}`}
-          key={i}
-          onClick={() => {
-            data.notification = 0;
-            initCounting(data.id, data.member_id);
-          }}
-        >
+        <Link to={`/main/chats/${data.id}?mem_id=${data.member_id}`} key={i}>
           <li className="chatroom_container">
             <div className="chat_into">
               <div className="profileImg">
