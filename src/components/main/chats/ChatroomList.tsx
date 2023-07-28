@@ -28,7 +28,6 @@ const ChatroomList = ({
   useEffect(() => {
     setFilteredDataList(dataList);
     setCntObj(initCntObj);
-    console.log(dataList);
   }, [dataList]);
 
   function lastUpdatedAt(date: Date) {
@@ -123,10 +122,8 @@ const ChatroomList = ({
     if (data.notification > 0) {
       if (parseInt(id!) === data.id) {
         initCounting(data.id, data.member_id, i);
-        console.log("채팅방O ", data.name, "의 알림수 : ", data.notification);
         saveOrUpdateNoti(data.id, data.member_id, data.notification);
       } else {
-        console.log("채팅방X ", data.name, "의 알림수 : ", data.notification);
         saveOrUpdateNoti(data.id, data.member_id, data.notification);
       }
     }
