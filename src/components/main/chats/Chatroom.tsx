@@ -24,7 +24,8 @@ const ChatRoom = () => {
   const mem_id = searchParam.get("mem_id") as string;
 
   const chatContainerRef = useRef<HTMLDivElement>(null);
-  const fileRef = useRef<HTMLInputElement>(null);
+  const fileRefDoc = useRef<HTMLInputElement>(null);
+  const fileRefImage = useRef<HTMLInputElement>(null);
 
   // 스크롤 맨 아래로 자동 이동
   useEffect(() => {
@@ -147,16 +148,14 @@ const ChatRoom = () => {
 
   // 이미지, 문서 파일 업로드
   const handleUpload = (uploadType: string, field: string) => {
-    if (
-      fileRef.current &&
-      fileRef.current.files &&
-      fileRef.current.files.length > 0
-    ) {
-      let chatFile = fileRef.current.files[0];
+    const chatImageFile = fileRefImage.current?.files;
+    const chatDocFile = fileRefDoc.current?.files;
 
+    let chatFile = chatImageFile![0] || chatDocFile![0];
+    if (chatFile) {
       let formdata = new FormData();
       formdata.append(field, chatFile);
-      console.log(uploadType, field);
+
       axios
         .post(`/chats/${roomId}/${uploadType}`, formdata, {
           withCredentials: true,
@@ -165,14 +164,18 @@ const ChatRoom = () => {
           // 실시간 파일 전송
           const chatFile = res.data;
           console.log("chatFile=", chatFile);
-          uploadType === "uploadImage"
-            ? sendNewMessageToSocket(null, chatFile, null, null)
-            : sendNewMessageToSocket(
-                null,
-                null,
-                chatFile.document,
-                chatFile.originalDocName
-              );
+          if (uploadType === "uploadImage") {
+            sendNewMessageToSocket(null, chatFile, null, null);
+            fileRefImage.current!.value = ""; // 이미지 업로드 요소 초기화
+          } else {
+            sendNewMessageToSocket(
+              null,
+              null,
+              chatFile.document,
+              chatFile.originalDocName
+            );
+            fileRefDoc.current!.value = ""; // 문서 업로드 요소 초기화
+          }
         })
         .catch((err) => console.log(err));
     }
@@ -202,7 +205,7 @@ const ChatRoom = () => {
           id="chat_image"
           accept="image/*"
           name="chatImage"
-          ref={fileRef}
+          ref={fileRefImage}
           onChange={() => handleUpload("uploadImage", "chatImage")}
         />
         <label htmlFor="chat_document">
@@ -212,7 +215,7 @@ const ChatRoom = () => {
           type="file"
           id="chat_document"
           name="chatDocument"
-          ref={fileRef}
+          ref={fileRefDoc}
           onChange={() => handleUpload("uploadDocument", "chatDocument")}
         />
         <input
