@@ -2,6 +2,7 @@ import { Link, useParams } from "react-router-dom";
 import profileNone from "../../../assets/profile_none.png";
 import { io } from "socket.io-client";
 import { useEffect, useState } from "react";
+import axios from "axios";
 
 const ChatroomList = ({
   dataList,
@@ -16,7 +17,7 @@ const ChatroomList = ({
   const initCntObj = dataList.map((data) => ({
     [data.id]: {
       sender_id: data.member_id,
-      cnt: 0,
+      cnt: data.notification,
     },
   }));
 
@@ -101,18 +102,49 @@ const ChatroomList = ({
   }, [filteredDataList]);
 
   // 채팅방에 입장할 경우, 채팅방에 입장한 상태인 경우 알림 초기화
+  const saveOrUpdateNoti = async (
+    roomId: number,
+    userId: number,
+    count: number
+  ) => {
+    const notiInfo = {
+      roomId: roomId,
+      userId: userId,
+      notiCnt: count,
+    };
+
+    await axios.post(`chats/${id}/notification`, notiInfo, {
+      withCredentials: true,
+    });
+  };
+
+  const processNotification = (data: ChatroomList, i: number) => {
+    if (data.notification > 0) {
+      if (parseInt(id!) === data.id) {
+        initCounting(data.id, data.member_id, i);
+        saveOrUpdateNoti(data.id, data.member_id, data.notification);
+      } else {
+        saveOrUpdateNoti(data.id, data.member_id, data.notification);
+      }
+    }
+  };
+
   useEffect(() => {
     filteredDataList.map((data, i) => {
-      if (parseInt(id!) === data.id && data.notification > 0) {
-        initCounting(data.id, data.member_id, i);
-      }
+      processNotification(data, i);
     });
   }, [id, filteredDataList]);
 
   return (
     <>
       {filteredDataList.map((data, i) => (
-        <Link to={`/main/chats/${data.id}?mem_id=${data.member_id}`} key={i}>
+        <Link
+          to={`/main/chats/${data.id}?mem_id=${data.member_id}`}
+          key={i}
+          onClick={() => {
+            processNotification(data, i);
+          }}
+        >
           <li className="chatroom_container">
             <div className="chat_into">
               <div className="profileImg">
