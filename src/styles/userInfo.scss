@@ -11,6 +11,7 @@
     background-color: var(--white-color);
     padding: 40px;
     box-sizing: border-box;
+    transition: all 0.7s;
 
     button {
       margin-bottom: 100px;
@@ -68,8 +69,6 @@
       input {
         height: 49px;
         padding: 0 20px;
-        // border-radius: 5px;
-        // border: 1px solid var(--gray-color);
         border: none;
         border-bottom: 1px solid var(--gray-color);
       }
@@ -116,28 +115,11 @@
   }
 
   .hidden {
-    animation: hiddenSlider 0.7s forwards;
+    visibility: hidden;
+    right: -480px;
   }
 
   .active {
-    animation: showSlider 0.7s forwards;
-  }
-
-  @keyframes showSlider {
-    0% {
-      transform: translateX(480px);
-    }
-    100% {
-      transform: translateX(0px);
-    }
-  }
-
-  @keyframes hiddenSlider {
-    0% {
-      transform: translateX(0px);
-    }
-    100% {
-      transform: translateX(480px);
-    }
+    right: 0px;
   }
 }
