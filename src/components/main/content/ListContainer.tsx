@@ -40,7 +40,6 @@ function ListContainer(props: Props) {
       axios
         .get(`/users/search/${nickname}`, { withCredentials: true })
         .then((res) => {
-          console.log(res);
           setListData(res.data);
         })
         .catch((err) => console.log(err));
@@ -65,7 +64,7 @@ function ListContainer(props: Props) {
           <FontAwesomeIcon icon={faSearch} />
         </button>
       </div>
-      {dataList && dataList.length > 0 ? (
+      {listData && listData.length > 0 ? (
         <ul className="info">
           {menu === "friends" ? (
             <FriendList dataList={listData as FriendList[]} />
@@ -80,7 +79,13 @@ function ListContainer(props: Props) {
         </ul>
       ) : (
         <div className="empty_text">{`${
-          menu === "friends" ? "친구" : "채팅"
+          menu === "friends"
+            ? "친구"
+            : menu === "chats"
+            ? "채팅"
+            : menu === "profile"
+            ? "친구 요청"
+            : null
         } 목록이 비어있습니다.`}</div>
       )}
     </div>

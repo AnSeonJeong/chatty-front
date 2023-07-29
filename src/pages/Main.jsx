@@ -63,7 +63,7 @@ function Main() {
       ) : menu === "friends" ? (
         <Friends dataList={dataList} />
       ) : menu === "profile" ? (
-        <Profile dataList={dataList} />
+        <Profile dataList={dataList} userId={userId} />
       ) : null}
     </div>
   );

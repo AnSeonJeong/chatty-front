@@ -2,7 +2,13 @@ import { faUserPlus } from "@fortawesome/free-solid-svg-icons";
 import ContentContianer from "./content/ContentContainer";
 import ListContainer from "./content/ListContainer";
 
-function Profile({ dataList }: { dataList: FriendList[] }) {
+function Profile({
+  dataList,
+  userId,
+}: {
+  dataList: FriendList[];
+  userId: number;
+}) {
   console.log(dataList);
 
   return (
@@ -13,7 +19,7 @@ function Profile({ dataList }: { dataList: FriendList[] }) {
         userId={undefined}
         icon={faUserPlus}
       />
-      <ContentContianer />
+      <ContentContianer myid={userId} />
     </div>
   );
 }
