@@ -13,7 +13,7 @@
 
   .user_info {
     position: absolute;
-    width: 80%;
+    width: 70%;
     top: 100px;
     left: 50%;
     transform: translateX(-50%);
@@ -21,39 +21,44 @@
     display: flex;
     justify-content: space-between;
 
-    .profileImg {
+    div:first-child {
       width: 200px;
-      height: 200px;
-      border-radius: 50%;
-      overflow: hidden;
-      position: relative;
-      margin-bottom: 20px;
 
-      img {
-        height: 100%;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        background-color: var(--white-color);
+      .profileImg {
+        width: 200px;
+        height: 200px;
+        border-radius: 50%;
+        overflow: hidden;
+        position: relative;
+        margin-bottom: 20px;
+
+        img {
+          height: 100%;
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          background-color: var(--white-color);
+        }
+      }
+
+      ul {
+        text-align: center;
+
+        .nickname {
+          font-size: 18px;
+          font-weight: 800;
+          padding-bottom: 8px;
+        }
+
+        .email {
+          font-size: 14px;
+          color: #404040;
+          padding-bottom: 10px;
+        }
       }
     }
 
-    ul {
-      text-align: center;
-
-      .nickname {
-        font-size: 18px;
-        font-weight: 800;
-        padding-bottom: 8px;
-      }
-
-      .email {
-        font-size: 14px;
-        color: #404040;
-        padding-bottom: 10px;
-      }
-    }
     .btns {
       display: flex;
       align-items: center;

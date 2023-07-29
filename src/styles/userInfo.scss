@@ -1,0 +1,143 @@
+.content {
+  overflow: hidden;
+
+  .update_container {
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 10;
+    width: 480px;
+    height: 100%;
+    background-color: var(--white-color);
+    padding: 40px;
+    box-sizing: border-box;
+
+    button {
+      margin-bottom: 100px;
+    }
+
+    .profile {
+      display: grid;
+      justify-content: center;
+
+      div {
+        width: 170px;
+        height: 170px;
+        border-radius: 50%;
+        overflow: hidden;
+        position: relative;
+
+        img {
+          height: 100%;
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+        }
+      }
+
+      label {
+        cursor: pointer;
+        font-size: 14px;
+        margin-top: 10px;
+        color: var(--dark-color);
+        text-align: center;
+      }
+
+      label:hover {
+        color: var(--main-color);
+      }
+
+      #file {
+        display: none;
+      }
+    }
+    .info {
+      display: flex;
+      flex-direction: column;
+      margin-top: 35px;
+
+      .err_message {
+        text-align: left;
+        font-size: 12px;
+        margin-top: 6px;
+        color: red;
+        padding-left: 5px;
+      }
+
+      input {
+        height: 49px;
+        padding: 0 20px;
+        // border-radius: 5px;
+        // border: 1px solid var(--gray-color);
+        border: none;
+        border-bottom: 1px solid var(--gray-color);
+      }
+
+      input:not(:first-child) {
+        margin-top: 12px;
+      }
+
+      input:focus {
+        outline: none;
+        border-color: var(--main-color);
+      }
+
+      input::placeholder {
+        color: var(--gray-color);
+      }
+
+      input[type="date"]::before {
+        content: attr(data-placeholder);
+        color: var(--gray-color);
+        width: 100%;
+      }
+
+      input[type="date"]:focus::before,
+      input[type="date"]:valid::before {
+        display: none;
+      }
+
+      input:focus::placeholder {
+        color: transparent;
+      }
+    }
+
+    .confirmBtn {
+      width: 100%;
+      height: 49px;
+      background-color: var(--main-color);
+      border: none;
+      border-radius: 5px;
+      color: var(--white-color);
+      margin-top: 49px;
+      cursor: pointer;
+    }
+  }
+
+  .hidden {
+    animation: hiddenSlider 0.7s forwards;
+  }
+
+  .active {
+    animation: showSlider 0.7s forwards;
+  }
+
+  @keyframes showSlider {
+    0% {
+      transform: translateX(480px);
+    }
+    100% {
+      transform: translateX(0px);
+    }
+  }
+
+  @keyframes hiddenSlider {
+    0% {
+      transform: translateX(0px);
+    }
+    100% {
+      transform: translateX(480px);
+    }
+  }
+}
