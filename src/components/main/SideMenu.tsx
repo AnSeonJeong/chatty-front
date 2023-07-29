@@ -21,7 +21,7 @@ function SideMenu(props: Props) {
   const menus = [
     { name: "Chats", icon: faCommentDots, path: "/main/chats" },
     { name: "friends", icon: faUserFriends, path: "/main/friends" },
-    { name: "Profile", icon: faUserCircle, path: "/main/Profile" },
+    { name: "Profile", icon: faUserCircle, path: "/main/profile" },
   ];
 
   return (
