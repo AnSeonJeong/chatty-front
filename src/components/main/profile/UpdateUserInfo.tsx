@@ -89,7 +89,10 @@ function UpdateUserInfo(props: UpdateUserInfoProps) {
         {/* 프로필 사진 변경 */}
         <div className="profile">
           <div>
-            <img src={imgFile ? imgFile : profile} alt="profile" />
+            <img
+              src={!imgFile.endsWith("/null") ? imgFile : profile}
+              alt="profile"
+            />
           </div>
           <label htmlFor="file">프로필 사진 변경</label>
           <input
@@ -103,7 +106,7 @@ function UpdateUserInfo(props: UpdateUserInfoProps) {
         </div>
         {/* 회원 정보 변경 */}
         <div className="info">
-          <input type="email" value={userInfo.email} readOnly />
+          <input type="email" value={userInfo.email || ""} readOnly />
           <input
             type="password"
             value={pwd}
