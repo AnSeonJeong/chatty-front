@@ -52,13 +52,19 @@ function UpdateUserInfo(props: UpdateUserInfoProps) {
   };
 
   // 프로필 이미지 변경
-  const saveProfileImage = async (id: number) => {
+  const updateProfileImage = async (profile: string) => {
     let imageFormdata = new FormData();
-    if (saveImg !== undefined) imageFormdata.append("profile", saveImg);
 
-    await axios.post("/profile/update/image", imageFormdata, {
-      params: { id: id },
-    });
+    if (saveImg !== undefined) {
+      imageFormdata.append("profile", saveImg);
+
+      const res = await axios.post("/profile/update/image", imageFormdata, {
+        params: { profile: profile },
+        withCredentials: true,
+      });
+
+      return res.data;
+    } else return true;
   };
 
   // 회원 정보 수정
@@ -70,11 +76,13 @@ function UpdateUserInfo(props: UpdateUserInfoProps) {
     if (intro !== userInfo.intro) formdata.append("intro", intro);
 
     axios
-      .post("/profile/update", formdata)
+      .post("/profile/update", formdata, { withCredentials: true })
       .then((res) => {
         if (res.data) {
-          saveProfileImage(res.data.id);
-          alert("수정완료");
+          const isSaved = updateProfileImage(userInfo.profile);
+          if (res.data) alert(res.data);
+          if (!isSaved) alert("프로필 이미지 업데이트 실패");
+          document.location.reload();
         }
       })
       .catch((err) => {
