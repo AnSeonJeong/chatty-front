@@ -1,18 +1,22 @@
 import profileNone from "../../../assets/profile_none.png";
 import "../../../styles/friend_info.scss";
+import React from "react";
 
 interface UserInfoProps {
   userInfo: UserInfo;
   setIsClicked: React.Dispatch<React.SetStateAction<boolean>>;
+  setVisible: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 function UserInfo(props: UserInfoProps) {
-  const { userInfo, setIsClicked } = props;
+  const { userInfo, setIsClicked, setVisible } = props;
 
-  const updateUserInfo = () => {
-    const updateContainer = document.getElementsByClassName("update_container");
-    console.log(updateContainer);
+  const handleUpdateUserBtn = () => {
     setIsClicked(true);
+  };
+
+  const handleDeleteUserBtn = () => {
+    setVisible(true);
   };
 
   return (
@@ -28,8 +32,8 @@ function UserInfo(props: UserInfoProps) {
         </ul>
       </div>
       <div className="btns">
-        <button onClick={updateUserInfo}>수정</button>
-        <button>탈퇴</button>
+        <button onClick={handleUpdateUserBtn}>수정</button>
+        <button onClick={handleDeleteUserBtn}>탈퇴</button>
       </div>
     </div>
   );

@@ -19,7 +19,7 @@ function Profile({
         userId={undefined}
         icon={faUserPlus}
       />
-      <ContentContianer myid={userId} />
+      <ContentContianer myId={userId} />
     </div>
   );
 }
