@@ -11,14 +11,13 @@ import axios from "axios";
 function ContentContianer({ myid }: { myid: number | undefined }) {
   const { menu, id } = useParams();
   const [isClicked, setIsClicked] = useState(false);
-  const [userInfo, setUserInfo] = useState<FriendList>({} as FriendList);
+  const [userInfo, setUserInfo] = useState<UserInfo>({} as UserInfo);
 
   useEffect(() => {
     if (menu === "profile" && myid) {
       axios
         .get(`/users/${myid}`, { withCredentials: true })
         .then((res) => {
-          console.log(res.data);
           setUserInfo(res.data);
         })
         .catch((err) => console.log(err));

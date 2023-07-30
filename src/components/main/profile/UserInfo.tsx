@@ -1,10 +1,8 @@
-import axios from "axios";
-import { useEffect, useState } from "react";
 import profileNone from "../../../assets/profile_none.png";
 import "../../../styles/friend_info.scss";
 
 interface UserInfoProps {
-  userInfo: FriendList;
+  userInfo: UserInfo;
   setIsClicked: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
