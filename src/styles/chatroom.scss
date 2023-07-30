@@ -1,8 +1,16 @@
 .chatroom_container {
   overflow: auto;
 
+  .chatting_title {
+    button {
+      position: fixed;
+      right: 21px;
+      line-height: 50px;
+    }
+  }
+
   .chats {
-    height: 83vh;
+    height: 85.5vh;
   }
 
   .chatting_list {
@@ -119,7 +127,7 @@
   form {
     width: 100%;
     position: absolute;
-    bottom: 38px;
+    bottom: 21px;
     left: 0;
     right: 0;
     text-align: center;
@@ -137,6 +145,10 @@
 
     label:hover {
       color: var(--main-color);
+    }
+
+    label:first-child {
+      margin-right: 15px;
     }
 
     input[type="file"] {
