@@ -3,7 +3,7 @@ import profile from "../../../assets/profile_none.png";
 import axios from "axios";
 
 interface UpdateUserInfoProps {
-  userInfo: FriendList;
+  userInfo: UserInfo;
   isClicked: boolean;
   setIsClicked: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -89,10 +89,7 @@ function UpdateUserInfo(props: UpdateUserInfoProps) {
         {/* 프로필 사진 변경 */}
         <div className="profile">
           <div>
-            <img
-              src={!imgFile.endsWith("/null") ? imgFile : profile}
-              alt="profile"
-            />
+            <img src={userInfo.profile ? imgFile : profile} alt="profile" />
           </div>
           <label htmlFor="file">프로필 사진 변경</label>
           <input
@@ -107,19 +104,23 @@ function UpdateUserInfo(props: UpdateUserInfoProps) {
         {/* 회원 정보 변경 */}
         <div className="info">
           <input type="email" value={userInfo.email || ""} readOnly />
-          <input
-            type="password"
-            value={pwd}
-            placeholder="변경할 비밀번호"
-            onChange={(e) => setPwd(e.target.value)}
-          />
-          <input
-            type="password"
-            value={confirmPwd}
-            placeholder="변경할 비밀번호 확인"
-            onChange={(e) => setConfirmPwd(e.target.value)}
-          />
-          <CheckPwd />
+          {!userInfo.type && (
+            <>
+              <input
+                type="password"
+                value={pwd}
+                placeholder="변경할 비밀번호"
+                onChange={(e) => setPwd(e.target.value)}
+              />
+              <input
+                type="password"
+                value={confirmPwd}
+                placeholder="변경할 비밀번호 확인"
+                onChange={(e) => setConfirmPwd(e.target.value)}
+              />
+              <CheckPwd />
+            </>
+          )}
           <input
             value={nickname || ""}
             placeholder="*닉네임"
