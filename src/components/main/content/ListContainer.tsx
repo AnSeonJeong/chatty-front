@@ -6,6 +6,7 @@ import axios from "axios";
 import ChatroomList from "../chats/ChatroomList";
 import FriendList from "../friends/friendList";
 import "../../../styles/list_container.scss";
+import FriendRequestList from "../profile/FriendRequestList";
 
 interface Props {
   title: string;
@@ -68,12 +69,14 @@ function ListContainer(props: Props) {
         <ul className="info">
           {menu === "friends" ? (
             <FriendList dataList={listData as FriendList[]} />
-          ) : (
+          ) : menu === "chats" ? (
             <ChatroomList
               dataList={listData as ChatroomList[]}
               userId={userId!}
             />
-          )}
+          ) : menu === "profile" ? (
+            <FriendRequestList dataList={listData as FriendList[]} />
+          ) : null}
         </ul>
       ) : (
         <div className="empty_text">{`${
