@@ -7,6 +7,7 @@ import axios from "axios";
 import { useParams, useSearchParams } from "react-router-dom";
 import ChatList from "./ChatList";
 import "../../../styles/chatroom.scss";
+import ExitChatroom from "./ExitChatroom";
 
 const ChatRoom = () => {
   const socket = io("http://localhost:3000");
@@ -183,6 +184,7 @@ const ChatRoom = () => {
 
   return (
     <div className="chatroom_container" ref={chatContainerRef}>
+      <ExitChatroom roomId={parseInt(roomId!)} />
       <div className="chats">
         <ul className="chatting_list">
           <ChatList

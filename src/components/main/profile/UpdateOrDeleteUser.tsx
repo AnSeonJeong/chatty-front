@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import Modal from "./Modal";
+import Modal from "../Modal";
 import UpdateUserInfo from "./UpdateUserInfo";
 import UserInfo from "./UserInfo";
 
