@@ -18,7 +18,7 @@ function Main() {
 
   const { menu } = useParams();
 
-  const fetchData = (menu) => {
+  const fetchData = (menu: string) => {
     console.log("fetch data");
     axios
       .get(`/${menu}`, { withCredentials: true })
@@ -47,7 +47,7 @@ function Main() {
   }, []);
 
   useEffect(() => {
-    fetchData(menu);
+    fetchData(menu!);
   }, [menu]);
 
   return (
@@ -59,7 +59,7 @@ function Main() {
         profileUrl={profileUrl}
       />
       {menu === "chats" ? (
-        <Chats dataList={dataList} userId={userId} />
+        <Chats dataList={dataList} userId={userId} fetchData={fetchData} />
       ) : menu === "friends" ? (
         <Friends dataList={dataList} />
       ) : menu === "profile" ? (
