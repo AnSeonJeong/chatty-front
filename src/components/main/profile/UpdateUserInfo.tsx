@@ -20,9 +20,11 @@ function UpdateUserInfo(props: UpdateUserInfoProps) {
   const imgRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    setNickname(userInfo.nickname);
-    setIntro(userInfo.intro);
-    setImgFile(userInfo.profileUrl);
+    const { nickname, intro, profile, profileUrl } = userInfo;
+
+    setNickname(nickname);
+    setIntro(intro);
+    if (profile !== null && profile !== "") setImgFile(profileUrl);
   }, [isClicked]);
 
   // 이미지 업로드 & 미리보기
@@ -97,7 +99,7 @@ function UpdateUserInfo(props: UpdateUserInfoProps) {
         {/* 프로필 사진 변경 */}
         <div className="profile">
           <div>
-            <img src={userInfo.profile ? imgFile : profile} alt="profile" />
+            <img src={imgFile ? imgFile : profile} alt="profile" />
           </div>
           <label htmlFor="file">프로필 사진 변경</label>
           <input

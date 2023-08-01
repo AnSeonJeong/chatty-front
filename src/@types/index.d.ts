@@ -40,3 +40,12 @@ type UserInfo = {
   profileUrl: string;
   type: string;
 };
+
+type ModalProps = {
+  visible: boolean;
+  title: string;
+  description: string;
+  onCancel: () => void;
+  onConfirm: (id: number) => void;
+  id: number;
+};

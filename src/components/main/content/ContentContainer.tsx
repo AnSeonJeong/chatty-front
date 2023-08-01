@@ -1,28 +1,11 @@
 import { useParams } from "react-router-dom";
 import ChatRoom from "../chats/Chatroom";
 import FriendInfo from "../friends/FriendInfo";
-import UserInfo from "../profile/UserInfo";
-import UpdateUserInfo from "../profile/UpdateUserInfo";
-import { useEffect, useState } from "react";
-
 import "../../../styles/userInfo.scss";
-import axios from "axios";
+import UpdateOrDeleteUser from "../profile/UpdateOrDeleteUser";
 
-function ContentContianer({ myid }: { myid: number | undefined }) {
+function ContentContianer({ myId }: { myId: number | undefined }) {
   const { menu, id } = useParams();
-  const [isClicked, setIsClicked] = useState(false);
-  const [userInfo, setUserInfo] = useState<UserInfo>({} as UserInfo);
-
-  useEffect(() => {
-    if (menu === "profile" && myid) {
-      axios
-        .get(`/users/${myid}`, { withCredentials: true })
-        .then((res) => {
-          setUserInfo(res.data);
-        })
-        .catch((err) => console.log(err));
-    }
-  }, [myid]);
 
   return (
     <div className="content">
@@ -33,23 +16,13 @@ function ContentContianer({ myid }: { myid: number | undefined }) {
         </>
       )}
       {menu === "chats" && id && <ChatRoom />}
-      {menu === "profile" && myid && (
-        <>
-          <UpdateUserInfo
-            userInfo={userInfo!}
-            isClicked={isClicked}
-            setIsClicked={setIsClicked}
-          />
-          <div className="background"></div>
-          <UserInfo userInfo={userInfo!} setIsClicked={setIsClicked} />
-        </>
-      )}
+      {menu === "profile" && myId && <UpdateOrDeleteUser myId={myId} />}
     </div>
   );
 }
 
 ContentContianer.defaultProps = {
-  myid: undefined,
+  myId: undefined,
 };
 
 export default ContentContianer;
