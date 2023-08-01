@@ -23,13 +23,13 @@ const ChatroomList = ({
 
   const [cntObj, setCntObj] = useState(initCntObj);
 
-  const { id } = useParams();
+  const { id: current_roomId } = useParams();
 
   useEffect(() => {
     setFilteredDataList(dataList);
     setCntObj(initCntObj);
   }, [dataList]);
-
+  console.log(filteredDataList);
   function lastUpdatedAt(date: Date) {
     if (!date) return;
 
@@ -61,6 +61,7 @@ const ChatroomList = ({
         })
       );
       setFilteredDataList(newDataList);
+      saveOrUpdateNoti(data.id, userId, 0);
     }
   }
 
@@ -80,7 +81,7 @@ const ChatroomList = ({
           ...filteredMessage,
           lastMessage: data.text || data.image || data.originalDocName,
           lastUpdatedAt: data.createdAt,
-          notification: userId !== data.sender_id && ++count[roomId].cnt,
+          notification: ++count[roomId].cnt,
         };
 
         // 기존 배열에서 해당 메시지를 제외하고 맨 앞에 새로운 메시지를 추가
@@ -90,6 +91,10 @@ const ChatroomList = ({
         ];
 
         setFilteredDataList(updatedList as ChatroomList[]);
+
+        const { id, member_id, notification } = updatedMessage;
+        if (parseInt(current_roomId!) !== id)
+          saveOrUpdateNoti(id, member_id, notification);
       }
     };
 
@@ -108,32 +113,28 @@ const ChatroomList = ({
     count: number
   ) => {
     const notiInfo = {
-      roomId: roomId,
+      roomId: current_roomId,
       userId: userId,
       notiCnt: count,
     };
-
-    await axios.post(`chats/${id}/notification`, notiInfo, {
+    await axios.post(`chats/${roomId}/notification`, notiInfo, {
       withCredentials: true,
     });
   };
 
   const processNotification = (data: ChatroomList, i: number) => {
     if (data.notification > 0) {
-      if (parseInt(id!) === data.id) {
+      if (parseInt(current_roomId!) === data.id) {
         initCounting(data.id, data.member_id, i);
-        saveOrUpdateNoti(data.id, data.member_id, data.notification);
-      } else {
-        saveOrUpdateNoti(data.id, data.member_id, data.notification);
       }
     }
   };
 
   useEffect(() => {
-    filteredDataList.map((data, i) => {
+    filteredDataList.filter((data, i) => {
       processNotification(data, i);
     });
-  }, [id, filteredDataList]);
+  }, [current_roomId, filteredDataList]);
 
   return (
     <>
@@ -164,7 +165,8 @@ const ChatroomList = ({
             </div>
             <div className="date_and_nocification">
               <span>{lastUpdatedAt(data.lastUpdatedAt)}</span>
-              {parseInt(id!) !== data.id && data.notification > 0 ? (
+              {parseInt(current_roomId!) !== data.id &&
+              data.notification > 0 ? (
                 <span className="bg_color">{data.notification}</span>
               ) : (
                 <span></span>
