@@ -1,16 +1,15 @@
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useSearchParams } from "react-router-dom";
 import profileNone from "../../../assets/profile_none.png";
 import { io } from "socket.io-client";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-const ChatroomList = ({
-  dataList,
-  userId,
-}: {
+interface ChatroomListProps {
   dataList: ChatroomList[];
   userId: number;
-}) => {
+}
+
+const ChatroomList = ({ dataList, userId }: ChatroomListProps) => {
   const [filteredDataList, setFilteredDataList] =
     useState<ChatroomList[]>(dataList); // dataList를 상태로 관리
 
@@ -81,7 +80,8 @@ const ChatroomList = ({
           ...filteredMessage,
           lastMessage: data.text || data.image || data.originalDocName,
           lastUpdatedAt: data.createdAt,
-          notification: ++count[roomId].cnt,
+          notification:
+            data.sender_id !== userId ? ++count[roomId].cnt : count[roomId].cnt,
         };
 
         // 기존 배열에서 해당 메시지를 제외하고 맨 앞에 새로운 메시지를 추가
@@ -92,9 +92,9 @@ const ChatroomList = ({
 
         setFilteredDataList(updatedList as ChatroomList[]);
 
-        const { id, member_id, notification } = updatedMessage;
+        const { id, notification } = updatedMessage;
         if (parseInt(current_roomId!) !== id)
-          saveOrUpdateNoti(id, member_id, notification);
+          saveOrUpdateNoti(id, userId, notification);
       }
     };
 
@@ -113,7 +113,7 @@ const ChatroomList = ({
     count: number
   ) => {
     const notiInfo = {
-      roomId: current_roomId,
+      roomId: roomId,
       userId: userId,
       notiCnt: count,
     };
@@ -122,20 +122,6 @@ const ChatroomList = ({
     });
   };
 
-  const processNotification = (data: ChatroomList, i: number) => {
-    if (data.notification > 0) {
-      if (parseInt(current_roomId!) === data.id) {
-        initCounting(data.id, data.member_id, i);
-      }
-    }
-  };
-
-  useEffect(() => {
-    filteredDataList.filter((data, i) => {
-      processNotification(data, i);
-    });
-  }, [current_roomId, filteredDataList]);
-
   return (
     <>
       {filteredDataList.map((data, i) => (
@@ -143,7 +129,7 @@ const ChatroomList = ({
           to={`/main/chats/${data.id}?mem_id=${data.member_id}`}
           key={i}
           onClick={() => {
-            processNotification(data, i);
+            initCounting(data.id, data.member_id, i);
           }}
         >
           <li className="chatroom_container">
