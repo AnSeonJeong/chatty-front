@@ -16,7 +16,7 @@ function ExitChatroom({ roomId }: { roomId: number }) {
       .post(`/chats/chatroom/${roomId}/exit`, null, { withCredentials: true })
       .then((res) => {
         if (res.data) {
-          history("/main/chat");
+          history("/main/chats");
           document.location.reload();
         }
       })
