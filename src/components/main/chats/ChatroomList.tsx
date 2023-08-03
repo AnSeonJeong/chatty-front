@@ -14,22 +14,16 @@ const ChatroomList = ({ dataList, userId, fetchData }: ChatroomListProps) => {
   const [filteredDataList, setFilteredDataList] =
     useState<ChatroomList[]>(dataList); // dataList를 상태로 관리
 
-  const initCntObj = dataList.map((data) => ({
-    [data.id]: {
-      sender_id: data.member_id,
-      cnt: data.notification,
-    },
-  }));
-
-  const [cntObj, setCntObj] = useState(initCntObj);
   const [isCreated, setIsCreated] = useState(false);
+  const [currentRoomId, setCurrentRoomId] = useState(0);
 
-  const { id: current_roomId, menu } = useParams();
+  const { id, menu } = useParams();
 
   useEffect(() => {
     setFilteredDataList(dataList);
-    setCntObj(initCntObj);
-  }, [dataList]);
+    setCurrentRoomId(parseInt(id!));
+    console.log("dataList=", dataList);
+  }, [dataList, id]);
 
   // 새로 생성된 채팅방이면 fetchData함수 호출하여 리렌더링이 되도록 함
   useEffect(() => {
@@ -51,61 +45,91 @@ const ChatroomList = ({ dataList, userId, fetchData }: ChatroomListProps) => {
     } else return lastDate[0];
   }
 
-  function initCounting(roomId: number, senderId: number, index: number) {
-    const newDataList = [...filteredDataList]; // dataList의 복사본을 생성
-    const data = newDataList[index];
-    data.notification = 0; // 해당 chatroom의 notification을 초기화
+  // 알림수 초기화
+  function initCounting(roomId: number, memberId: number) {
+    setFilteredDataList((prevDataList) => {
+      const updatedDataList = [...prevDataList];
+      const notification = updatedDataList.filter((n) => n.id === roomId)[0]
+        .notification;
 
-    const count = cntObj.find((obj) => obj[roomId]);
-
-    if (count?.[roomId].sender_id === senderId) {
-      setCntObj(
-        cntObj.map((obj) => {
-          return obj[roomId]
-            ? { ...obj, [roomId]: { ...obj[roomId], cnt: 0 } }
-            : obj;
-        })
-      );
-      setFilteredDataList(newDataList);
-      saveOrUpdateNoti(data.id, userId, 0);
-    }
+      notification[memberId].count = 0;
+      return updatedDataList;
+    });
+    saveOrUpdateNoti(roomId, memberId, 0);
   }
 
   useEffect(() => {
     const socket = io("http://localhost:3000");
-    console.log("isCreated=", isCreated);
+
     // 채팅방 업데이트 (마지막 메시지 및 알림)
     const handleNewMessageCopy = (data: ChatList) => {
       let roomId = data.room_id;
-      const filteredMessage = dataList.filter((msg) => msg.id === roomId)[0];
+      const filteredData = dataList.filter((msg) => msg.id === roomId)[0];
+      const { text, image, originalDocName, createdAt, sender_id } = data;
 
-      if (filteredMessage) {
-        const count = cntObj.filter((obj) => obj[roomId])[0];
+      // 필터링된 데이터가 있으면 내용을 변경하고 상태를 업데이트
+      if (filteredData) {
+        // 기존의 알림
+        const prevNoti = filteredData.notification;
 
-        // 필터링된 메시지가 있으면 내용을 변경하고 상태를 업데이트
-        const updatedMessage = {
-          ...filteredMessage,
-          lastMessage: data.text || data.image || data.originalDocName,
-          lastUpdatedAt: data.createdAt,
-          notification:
-            data.sender_id !== userId ? ++count[roomId].cnt : count[roomId].cnt,
+        // 업데이트한 알림값을 넣을 배열
+        let noti: { [key: number]: { count: number } } = prevNoti;
+        const conutValue = (
+          senderId: number,
+          userId: number,
+          currentRoomId: number,
+          roomId: number,
+          memberId: number
+        ) => {
+          if (currentRoomId === roomId) {
+            if (userId === senderId) {
+              // 내가 채팅방에서 메시지를 보내는 경우
+              let cnt = 1;
+              prevNoti[userId]
+                ? (cnt = ++prevNoti[userId].count)
+                : (prevNoti[userId] = { count: 1 });
+              saveOrUpdateNoti(roomId, userId, cnt); // 1. 내가 보낸 경우 먼저 저장
+            } else {
+              // 상대방이 메시지를 받는 경우
+              setTimeout(() => saveOrUpdateNoti(roomId, senderId, 0), 1000); // 2. 후에 상대방이 받는 경우 저장
+            }
+          } else {
+            // 채팅방에 보내는 사람만 들어가 있는 경우
+            prevNoti[memberId]
+              ? ++prevNoti[memberId].count
+              : (prevNoti[memberId] = { count: 1 });
+          }
+        };
+
+        // 알림 업데이트 실행
+        conutValue(
+          sender_id,
+          userId,
+          currentRoomId,
+          roomId,
+          filteredData.member_id
+        );
+
+        // 필터링했던 데이터 업데이트
+        const updatedData = {
+          ...filteredData,
+          lastMessage: text || image || originalDocName,
+          lastUpdatedAt: createdAt,
+          notification: noti,
         };
 
         // 기존 배열에서 해당 메시지를 제외하고 맨 앞에 새로운 메시지를 추가
         const updatedList = [
-          updatedMessage,
+          updatedData,
           ...filteredDataList.filter((msg) => msg.id !== roomId),
         ];
 
         setFilteredDataList(updatedList as ChatroomList[]);
-
-        const { id, notification } = updatedMessage;
-        if (parseInt(current_roomId!) !== id)
-          saveOrUpdateNoti(id, userId, notification);
       }
 
       // 새로 생성된 채팅방이면 isCreated상태값을 true로 변경
       if (data.chat_id === 1) setIsCreated(true);
+      console.log("isCreated=", isCreated);
     };
 
     socket.on("new_message_copy", handleNewMessageCopy);
@@ -127,9 +151,12 @@ const ChatroomList = ({ dataList, userId, fetchData }: ChatroomListProps) => {
       userId: userId,
       notiCnt: count,
     };
-    await axios.post(`chats/${roomId}/notification`, notiInfo, {
-      withCredentials: true,
-    });
+
+    await axios
+      .post(`chats/${roomId}/notification`, notiInfo, {
+        withCredentials: true,
+      })
+      .then((res) => console.log(res.data));
   };
 
   return (
@@ -139,7 +166,7 @@ const ChatroomList = ({ dataList, userId, fetchData }: ChatroomListProps) => {
           to={`/main/chats/${data.id}?mem_id=${data.member_id}`}
           key={i}
           onClick={() => {
-            initCounting(data.id, data.member_id, i);
+            initCounting(data.id, data.member_id);
           }}
         >
           <li className="chatroom_container">
@@ -160,10 +187,12 @@ const ChatroomList = ({ dataList, userId, fetchData }: ChatroomListProps) => {
               </div>
             </div>
             <div className="date_and_nocification">
-              <span>{lastUpdatedAt(data.lastUpdatedAt)}</span>
-              {parseInt(current_roomId!) !== data.id &&
-              data.notification > 0 ? (
-                <span className="bg_color">{data.notification}</span>
+              <span>{lastUpdatedAt(data?.lastUpdatedAt)}</span>
+              {currentRoomId !== data.id &&
+              data?.notification?.[data.member_id]?.count > 0 ? (
+                <span className="bg_color">
+                  {data.notification[data.member_id]?.count}
+                </span>
               ) : (
                 <span></span>
               )}
