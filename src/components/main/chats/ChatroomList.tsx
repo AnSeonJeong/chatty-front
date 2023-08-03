@@ -7,9 +7,10 @@ import axios from "axios";
 interface ChatroomListProps {
   dataList: ChatroomList[];
   userId: number;
+  fetchData: (menu: string) => void;
 }
 
-const ChatroomList = ({ dataList, userId }: ChatroomListProps) => {
+const ChatroomList = ({ dataList, userId, fetchData }: ChatroomListProps) => {
   const [filteredDataList, setFilteredDataList] =
     useState<ChatroomList[]>(dataList); // dataList를 상태로 관리
 
@@ -21,14 +22,20 @@ const ChatroomList = ({ dataList, userId }: ChatroomListProps) => {
   }));
 
   const [cntObj, setCntObj] = useState(initCntObj);
+  const [isCreated, setIsCreated] = useState(false);
 
-  const { id: current_roomId } = useParams();
+  const { id: current_roomId, menu } = useParams();
 
   useEffect(() => {
     setFilteredDataList(dataList);
     setCntObj(initCntObj);
   }, [dataList]);
-  console.log(filteredDataList);
+
+  // 새로 생성된 채팅방이면 fetchData함수 호출하여 리렌더링이 되도록 함
+  useEffect(() => {
+    fetchData(menu!);
+  }, [isCreated]);
+
   function lastUpdatedAt(date: Date) {
     if (!date) return;
 
@@ -66,7 +73,7 @@ const ChatroomList = ({ dataList, userId }: ChatroomListProps) => {
 
   useEffect(() => {
     const socket = io("http://localhost:3000");
-
+    console.log("isCreated=", isCreated);
     // 채팅방 업데이트 (마지막 메시지 및 알림)
     const handleNewMessageCopy = (data: ChatList) => {
       let roomId = data.room_id;
@@ -96,6 +103,9 @@ const ChatroomList = ({ dataList, userId }: ChatroomListProps) => {
         if (parseInt(current_roomId!) !== id)
           saveOrUpdateNoti(id, userId, notification);
       }
+
+      // 새로 생성된 채팅방이면 isCreated상태값을 true로 변경
+      if (data.chat_id === 1) setIsCreated(true);
     };
 
     socket.on("new_message_copy", handleNewMessageCopy);
@@ -104,7 +114,7 @@ const ChatroomList = ({ dataList, userId }: ChatroomListProps) => {
     return () => {
       socket.off("new_message_copy", handleNewMessageCopy);
     };
-  }, [filteredDataList]);
+  }, [filteredDataList, isCreated]);
 
   // 채팅방에 입장할 경우, 채팅방에 입장한 상태인 경우 알림 초기화
   const saveOrUpdateNoti = async (

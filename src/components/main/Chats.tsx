@@ -5,9 +5,11 @@ import ContentContianer from "./content/ContentContainer";
 function Chats({
   dataList,
   userId,
+  fetchData,
 }: {
   dataList: ChatroomList[];
   userId: number;
+  fetchData: (menu: string) => void;
 }) {
   return (
     <div className="container">
@@ -16,6 +18,7 @@ function Chats({
         dataList={dataList}
         userId={userId}
         icon={faSquarePlus}
+        fetchData={fetchData}
       />
       <ContentContianer />
     </div>
