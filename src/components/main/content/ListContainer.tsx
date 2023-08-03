@@ -27,23 +27,27 @@ function ListContainer(props: Props) {
   const { menu } = useParams();
 
   useEffect(() => {
-    if (!isClicked) setListData(dataList);
-  });
+    setListData(dataList);
+  }, [dataList]);
 
   const handleAddFriendsBtn = () => {
-    setIsClicked(!isClicked);
-    setListData([]);
+    //   setIsClicked(!isClicked);
+    //   setListData([]);
   };
 
-  const handleSearchUsers = (nickname: string) => {
+  const handleSearchUsersOrChats = (menu: string, nickname: string) => {
+    let search = "users";
+
     if (!nickname) alert("검색어를 입력해주세요.");
-    if (isClicked && nickname) {
+    if (!isClicked && nickname) {
+      if (menu === "chats") search = "chats";
+
       axios
-        .get(`/users/search/${nickname}`, { withCredentials: true })
+        .get(`/${search}/search/${nickname}`, { withCredentials: true })
         .then((res) => {
           setListData(res.data);
         })
-        .catch((err) => console.log(err));
+        .catch((err) => alert(err.response.data.error));
     }
   };
 
@@ -61,7 +65,7 @@ function ListContainer(props: Props) {
           placeholder="사용자 닉네임을 입력하세요."
           onChange={(e) => setSearch(e.target.value)}
         />
-        <button onClick={() => handleSearchUsers(search)}>
+        <button onClick={() => handleSearchUsersOrChats(menu!, search)}>
           <FontAwesomeIcon icon={faSearch} />
         </button>
       </div>
