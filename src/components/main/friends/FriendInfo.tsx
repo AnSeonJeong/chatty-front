@@ -2,7 +2,6 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import profileNone from "../../../assets/profile_none.png";
-import { io } from "socket.io-client";
 import "../../../styles/friend_info.scss";
 
 function FriendInfo({ id }: { id: number }) {
@@ -11,7 +10,7 @@ function FriendInfo({ id }: { id: number }) {
   const history = useNavigate();
 
   const handleFriendship = (isFriend: boolean, id: number) => {
-    let str = isFriend ? "remove" : "add";
+    let str = isFriend ? "remove" : "request";
     console.log(isFriend, str);
 
     axios
