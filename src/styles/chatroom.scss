@@ -38,6 +38,10 @@
       .chat_receiver {
         display: flex;
         margin-bottom: 10px;
+
+        .same_time_profile {
+          width: 60px;
+        }
       }
 
       .chat_sender {
@@ -85,7 +89,7 @@
       }
 
       .user_msg {
-        span:first-child {
+        .nickname {
           padding: 10px 0;
         }
         span {
