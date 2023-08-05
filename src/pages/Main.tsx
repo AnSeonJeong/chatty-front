@@ -19,9 +19,11 @@ function Main() {
   const { menu } = useParams();
 
   const fetchData = (menu: string) => {
+    let uri = menu;
+    if (menu === "profile") uri = "friends/requests";
     console.log("fetch data");
     axios
-      .get(`/${menu}`, { withCredentials: true })
+      .get(`/${uri}`, { withCredentials: true })
       .then((res) => {
         setDataList(res.data);
       })
@@ -32,7 +34,6 @@ function Main() {
     axios
       .get("/main", { withCredentials: true })
       .then((res) => {
-        console.log(res.data);
         setProfileUrl(res.data.profileUrl);
         setProfile(res.data.profile);
         setNickname(res.data.nickname);
