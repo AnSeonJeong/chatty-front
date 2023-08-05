@@ -60,10 +60,14 @@ function UpdateUserInfo(props: UpdateUserInfoProps) {
     if (saveImg !== undefined) {
       imageFormdata.append("profile", saveImg);
 
-      const res = await axios.post("/profile/update/image", imageFormdata, {
-        params: { profile: profile },
-        withCredentials: true,
-      });
+      const res = await axios.post(
+        "/users/profile-update/image",
+        imageFormdata,
+        {
+          params: { profile: profile },
+          withCredentials: true,
+        }
+      );
 
       return res.data;
     } else return true;
@@ -78,7 +82,7 @@ function UpdateUserInfo(props: UpdateUserInfoProps) {
     if (intro !== userInfo.intro) formdata.append("intro", intro);
 
     axios
-      .post("/profile/update", formdata, { withCredentials: true })
+      .post("/users/profile-update", formdata, { withCredentials: true })
       .then((res) => {
         if (res.data) {
           const isSaved = updateProfileImage(userInfo.profile);
