@@ -23,7 +23,7 @@ const ChatroomList = ({ dataList, userId, fetchData }: ChatroomListProps) => {
     setFilteredDataList(dataList);
     setCurrentRoomId(parseInt(id!));
     console.log("dataList=", dataList);
-  }, [dataList, id]);
+  }, [dataList]);
 
   // 새로 생성된 채팅방이면 fetchData함수 호출하여 리렌더링이 되도록 함
   useEffect(() => {
@@ -47,12 +47,16 @@ const ChatroomList = ({ dataList, userId, fetchData }: ChatroomListProps) => {
 
   // 알림수 초기화
   function initCounting(roomId: number, memberId: number) {
+    if (memberId === null) return;
+
     setFilteredDataList((prevDataList) => {
       const updatedDataList = [...prevDataList];
       const notification = updatedDataList.filter((n) => n.id === roomId)[0]
         .notification;
 
-      notification[memberId].count = 0;
+      notification[memberId]
+        ? (notification[memberId].count = 0)
+        : (notification[memberId] = { count: 0 });
       return updatedDataList;
     });
     saveOrUpdateNoti(roomId, memberId, 0);
@@ -93,7 +97,7 @@ const ChatroomList = ({ dataList, userId, fetchData }: ChatroomListProps) => {
               // 상대방이 메시지를 받는 경우
               setTimeout(() => saveOrUpdateNoti(roomId, senderId, 0), 1000); // 2. 후에 상대방이 받는 경우 저장
             }
-          } else {
+          } else if (userId !== senderId) {
             // 채팅방에 보내는 사람만 들어가 있는 경우
             prevNoti[memberId]
               ? ++prevNoti[memberId].count
@@ -151,7 +155,6 @@ const ChatroomList = ({ dataList, userId, fetchData }: ChatroomListProps) => {
       userId: userId,
       notiCnt: count,
     };
-
     await axios
       .post(`chats/notification/${roomId}`, notiInfo, {
         withCredentials: true,
