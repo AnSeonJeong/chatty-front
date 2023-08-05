@@ -153,7 +153,7 @@ const ChatroomList = ({ dataList, userId, fetchData }: ChatroomListProps) => {
     };
 
     await axios
-      .post(`chats/${roomId}/notification`, notiInfo, {
+      .post(`chats/notification/${roomId}`, notiInfo, {
         withCredentials: true,
       })
       .then((res) => console.log(res.data));

@@ -51,7 +51,7 @@ const ChatRoom = () => {
     const formdata = new FormData();
     formdata.append("text", message);
 
-    const res = await axios.post(`/chats/${roomId}/message`, formdata, {
+    const res = await axios.post(`/chats/send-message/${roomId}`, formdata, {
       withCredentials: true,
     });
     console.log(res.data);
@@ -158,14 +158,14 @@ const ChatRoom = () => {
       formdata.append(field, chatFile);
 
       axios
-        .post(`/chats/${roomId}/${uploadType}`, formdata, {
+        .post(`/chats/${uploadType}/${roomId}`, formdata, {
           withCredentials: true,
         })
         .then((res) => {
           // 실시간 파일 전송
           const chatFile = res.data;
           console.log("chatFile=", chatFile);
-          if (uploadType === "uploadImage") {
+          if (uploadType === "upload-image") {
             sendNewMessageToSocket(null, chatFile, null, null);
             fileRefImage.current!.value = ""; // 이미지 업로드 요소 초기화
           } else {
@@ -208,7 +208,7 @@ const ChatRoom = () => {
           accept="image/*"
           name="chatImage"
           ref={fileRefImage}
-          onChange={() => handleUpload("uploadImage", "chatImage")}
+          onChange={() => handleUpload("upload-image", "chatImage")}
         />
         <label htmlFor="chat_document">
           <FontAwesomeIcon className="icon" icon={faPaperclip} />
@@ -218,7 +218,7 @@ const ChatRoom = () => {
           id="chat_document"
           name="chatDocument"
           ref={fileRefDoc}
-          onChange={() => handleUpload("uploadDocument", "chatDocument")}
+          onChange={() => handleUpload("upload-document", "chatDocument")}
         />
         <input
           type="text"
@@ -226,9 +226,6 @@ const ChatRoom = () => {
           placeholder="메시지를 입력해주세요."
           onChange={(e) => setMessage(e.target.value)}
         />
-        <button className="emoticon">
-          <FontAwesomeIcon className="icon" icon={faFaceSmile} />
-        </button>
         <input type="submit" name="send_message" value="전송" />
       </form>
     </div>
