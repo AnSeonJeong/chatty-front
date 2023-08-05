@@ -79,6 +79,30 @@ const ChatItems = memo(
             createdAt,
           } = chat;
 
+          // 같은 시간에 보낸 채팅인지 확인하는 함수
+          const isSameTimeMessage = (chatIndex: number, isReverse: boolean) => {
+            // 역방향으로 나타내야할 경우
+            if (isReverse) {
+              if (chatIndex === group.length - 1) return false;
+
+              const prevMessage = group[chatIndex + 1];
+              return (
+                prevMessage.sender_id === chat.sender_id &&
+                customDate(prevMessage.createdAt) === customDate(chat.createdAt)
+              );
+            }
+            // 순방향으로 나타내야할 경우
+            else {
+              if (chatIndex === 0) return false;
+
+              const prevMessage = group[chatIndex - 1];
+              return (
+                prevMessage.sender_id === chat.sender_id &&
+                customDate(prevMessage.createdAt) === customDate(chat.createdAt)
+              );
+            }
+          };
+
           return chat.chat_id === null ? (
             <span
               key={chat.chat_id}
@@ -88,26 +112,36 @@ const ChatItems = memo(
             <li key={chatIndex}>
               {isSender ? (
                 <div className="chat_receiver">
-                  <div className="user_profile">
-                    <img
-                      src={
-                        profile
-                          ? `${baseUrl}${profilePath}/${profile}`
-                          : profileNone
-                      }
-                    />
-                  </div>
+                  {!isSameTimeMessage(chatIndex, false) ? (
+                    <div className="user_profile">
+                      <img
+                        src={
+                          profile
+                            ? `${baseUrl}${profilePath}/${profile}`
+                            : profileNone
+                        }
+                      />
+                    </div>
+                  ) : (
+                    <div className="same_time_profile" />
+                  )}
                   <div className="user_msg">
-                    <span>{nickname}</span>
+                    {!isSameTimeMessage(chatIndex, false) && (
+                      <span className="nickname">{nickname}</span>
+                    )}
                     <span className="received">
                       {messages(text, image, document, originalDocName)}
                     </span>
                   </div>
-                  <span className="chat_time">{customDate(createdAt)}</span>
+                  {!isSameTimeMessage(chatIndex, true) && (
+                    <span className="chat_time">{customDate(createdAt)}</span>
+                  )}
                 </div>
               ) : (
                 <div className="chat_sender">
-                  <span className="chat_time">{customDate(createdAt)}</span>
+                  {!isSameTimeMessage(chatIndex, true) && (
+                    <span className="chat_time">{customDate(createdAt)}</span>
+                  )}
                   <span className="sent">
                     {messages(text, image, document, originalDocName)}
                   </span>
