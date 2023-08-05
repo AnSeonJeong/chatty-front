@@ -1,7 +1,7 @@
 import { memo } from "react";
 import profileNone from "../../../assets/profile_none.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowDown, faFolder } from "@fortawesome/free-solid-svg-icons";
+import { faArrowDown } from "@fortawesome/free-solid-svg-icons";
 
 const ChatItems = memo(
   ({ group, userId }: { group: ChatList[]; userId: number }) => {
@@ -79,7 +79,12 @@ const ChatItems = memo(
             createdAt,
           } = chat;
 
-          return (
+          return chat.chat_id === null ? (
+            <span
+              key={chat.chat_id}
+              className="exit_msg"
+            >{`${nickname}님이 나갔습니다.`}</span>
+          ) : (
             <li key={chatIndex}>
               {isSender ? (
                 <div className="chat_receiver">
