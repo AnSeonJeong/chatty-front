@@ -1,6 +1,6 @@
 <br>
 <div align="center">
-  <img src="https://github.com/AnSeonJeong/chatty-front/assets/98884055/33fef1f2-20f2-4716-ab64-8b980270f81c">
+  <img src="https://github.com/AnSeonJeong/chatty-front/assets/98884055/0691f4ea-7dba-44ac-bcbf-47597d4e0064">
 </div>
 
 <br><br>
