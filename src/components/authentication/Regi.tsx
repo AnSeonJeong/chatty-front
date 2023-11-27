@@ -60,9 +60,7 @@ function Regi() {
     let imageFormdata = new FormData();
     if (saveImg !== undefined) imageFormdata.append("profile", saveImg);
 
-    await axios.post("/regi/upload", imageFormdata, {
-      params: { id: id },
-    });
+    await axios.post(`users/${id}/profile-images`, imageFormdata);
   };
 
   // 회원가입
@@ -83,7 +81,7 @@ function Regi() {
     }
 
     axios
-      .post("/regi", formdata)
+      .post("/users", formdata)
       .then((res) => {
         if (res.data) {
           saveProfileImage(res.data.id);

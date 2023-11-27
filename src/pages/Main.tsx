@@ -31,8 +31,10 @@ function Main() {
   };
 
   useEffect(() => {
+    const id = localStorage.getItem("id");
+
     axios
-      .get("/main", { withCredentials: true })
+      .get(`/users/${id}`, { withCredentials: true })
       .then((res) => {
         setProfileUrl(res.data.profileUrl);
         setProfile(res.data.profile);

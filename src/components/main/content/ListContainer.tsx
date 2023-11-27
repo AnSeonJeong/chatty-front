@@ -30,11 +30,6 @@ function ListContainer(props: Props) {
     setListData(dataList);
   }, [dataList]);
 
-  const handleAddFriendsBtn = () => {
-    //   setIsClicked(!isClicked);
-    //   setListData([]);
-  };
-
   const handleSearchUsersOrChats = (menu: string, nickname: string) => {
     let search = "users";
 
@@ -43,7 +38,10 @@ function ListContainer(props: Props) {
       if (menu === "chats") search = "chats";
 
       axios
-        .get(`/${search}/search/${nickname}`, { withCredentials: true })
+        .get(`/${search}`, {
+          withCredentials: true,
+          params: { nickname: nickname },
+        })
         .then((res) => {
           setListData(res.data);
         })
@@ -55,7 +53,7 @@ function ListContainer(props: Props) {
     <div className="list-content">
       <div className="title">
         <h2>{title}</h2>
-        <button className="addBtn" onClick={handleAddFriendsBtn}>
+        <button className="addBtn">
           <FontAwesomeIcon className="btnIcon" icon={icon} />
         </button>
       </div>

@@ -15,7 +15,8 @@ function Redirect() {
     .then((res) => {
       if (res.data) {
         // 토큰 발급에 성공하면 공통 헤더 설정
-        const token = res.data;
+        const token = res.data.token;
+        localStorage.setItem("id", res.data.id);
         axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
         // 메인 페이지로 이동
         history("/main/chats");
