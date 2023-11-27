@@ -18,6 +18,7 @@ function UpdateUserInfo(props: UpdateUserInfoProps) {
   const [imgFile, setImgFile] = useState("");
   const [saveImg, setSaveImg] = useState<File>();
   const imgRef = useRef<HTMLInputElement>(null);
+  const id = localStorage.getItem("id");
 
   useEffect(() => {
     const { nickname, intro, profile, profileUrl } = userInfo;
@@ -61,7 +62,7 @@ function UpdateUserInfo(props: UpdateUserInfoProps) {
       imageFormdata.append("profile", saveImg);
 
       const res = await axios.post(
-        "/users/profile-update/image",
+        `/users/${id}/profile-images`,
         imageFormdata,
         {
           params: { profile: profile },
@@ -82,7 +83,7 @@ function UpdateUserInfo(props: UpdateUserInfoProps) {
     if (intro !== userInfo.intro) formdata.append("intro", intro);
 
     axios
-      .post("/users/profile-update", formdata, { withCredentials: true })
+      .patch(`/users/${id}`, formdata, { withCredentials: true })
       .then((res) => {
         if (res.data) {
           const isSaved = updateProfileImage(userInfo.profile);
