@@ -37,8 +37,9 @@ function Login() {
       .post("/login", formdata, { withCredentials: true })
       .then((res) => {
         if (res.data) {
-          const token = res.data;
+          const token = res.data.token;
           axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+          localStorage.setItem("id", res.data.id);
           history("/main/chats");
           if (isChecked) localStorage.setItem("login", email);
           else localStorage.removeItem("login");
