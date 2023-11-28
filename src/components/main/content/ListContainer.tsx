@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import ChatroomList from "../chats/ChatroomList";
-import FriendList from "../friends/friendList";
+import FriendList from "../friends/FriendList";
 import "../../../styles/list_container.scss";
 import FriendRequestList from "../profile/FriendRequestList";
 

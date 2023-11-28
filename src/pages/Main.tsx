@@ -20,8 +20,10 @@ function Main() {
 
   const fetchData = (menu: string) => {
     let uri = menu;
-    if (menu === "profile") uri = "friends/requests";
-    console.log("fetch data");
+
+    if (menu === "friends") uri = `users/${userId}/friends`;
+    else if (menu === "profile") uri = `users/${userId}/friends/requests`;
+
     axios
       .get(`/${uri}`, { withCredentials: true })
       .then((res) => {
