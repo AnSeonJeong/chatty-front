@@ -4,26 +4,40 @@ import { useNavigate } from "react-router-dom";
 import profileNone from "../../../assets/profile_none.png";
 import "../../../styles/friend_info.scss";
 
-function FriendInfo({ id }: { id: number }) {
+function FriendInfo({ friendId }: { friendId: number }) {
   const [userInfo, setUserInfo] = useState<FriendList>({} as FriendList);
   const [isLoaded, setIsLoaded] = useState(false);
   const history = useNavigate();
+  const userId = localStorage.getItem("id");
 
-  const handleFriendship = (isFriend: boolean, id: number) => {
-    let str = isFriend ? "remove" : "request";
-    console.log(isFriend, str);
+  const handleFriendship = (isFriend: boolean, friendId: number) => {
+    let str = isFriend ? "remove" : "requests";
 
-    axios
-      .post(`/friends/${str}/${id}`, null, { withCredentials: true })
-      .then((res) => {
-        alert(res.data);
-        history("/main/friends");
-      })
-      .catch((err) => alert(err.response.data.error));
+    if (str == "remove") {
+      axios
+        .delete(`/users/${userId}/friends/${friendId}`, {
+          withCredentials: true,
+        })
+        .then((res) => {
+          alert(res.data);
+          history("/main/friends");
+        })
+        .catch((err) => alert(err.response.data.error));
+    } else if (str == "requests") {
+      axios
+        .post(`/users/${userId}/friends/${friendId}/${str}`, null, {
+          withCredentials: true,
+        })
+        .then((res) => {
+          alert(res.data);
+          history("/main/friends");
+        })
+        .catch((err) => alert(err.response.data.error));
+    }
   };
 
   const handleJoinChatroom = async () => {
-    const res = await axios.get(`/chats/member/${id}`, {
+    const res = await axios.get(`/chats/member/${friendId}`, {
       withCredentials: true,
     });
 
@@ -33,7 +47,7 @@ function FriendInfo({ id }: { id: number }) {
       history(`/main/chats/${res.data}`);
     } else {
       // 채팅방이 없는 경우
-      const memberIds = [id];
+      const memberIds = [friendId];
       const nicknames = [userInfo.nickname];
 
       const data = {
@@ -49,17 +63,16 @@ function FriendInfo({ id }: { id: number }) {
   };
 
   useEffect(() => {
-    if (!id) return;
+    if (!friendId) return;
 
     axios
-      .get(`/users/${id}`, { withCredentials: true })
+      .get(`users/${friendId}`, { withCredentials: true })
       .then((res) => {
-        console.log(res);
         setUserInfo(res.data);
         setIsLoaded(true);
       })
       .catch((err) => console.log(err));
-  }, [id]);
+  }, [friendId]);
 
   if (!isLoaded) {
     return <div>Loading...</div>;

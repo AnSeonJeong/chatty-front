@@ -12,7 +12,7 @@ function ContentContianer({ myId }: { myId: number | undefined }) {
       {menu === "friends" && id && (
         <>
           <div className="background"></div>
-          <FriendInfo id={parseInt(id)} />
+          <FriendInfo friendId={parseInt(id)} />
         </>
       )}
       {menu === "chats" && id && <ChatRoom />}
