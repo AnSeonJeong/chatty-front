@@ -2,7 +2,6 @@ import { io } from "socket.io-client";
 import { useState, useEffect, useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faImage, faPaperclip } from "@fortawesome/free-solid-svg-icons";
-import { faFaceSmile } from "@fortawesome/free-regular-svg-icons";
 import axios from "axios";
 import { useParams, useSearchParams } from "react-router-dom";
 import ChatList from "./ChatList";
@@ -17,12 +16,12 @@ const ChatRoom = () => {
   const [chatList, setChatList] = useState<ChatList[]>([]);
   const [nickname, setNickname] = useState("");
   const [profile, setProfile] = useState("");
-  const [userId, setUserId] = useState(0);
   const [prevRoomId, setPrevRoomId] = useState("");
   const [chatListLen, setChatListLen] = useState(0);
 
   const { id: roomId } = useParams();
   const mem_id = searchParam.get("mem_id") as string;
+  const userId = parseInt(localStorage.getItem("id")!);
 
   const chatContainerRef = useRef<HTMLDivElement>(null);
   const fileRefDoc = useRef<HTMLInputElement>(null);
@@ -51,10 +50,9 @@ const ChatRoom = () => {
     const formdata = new FormData();
     formdata.append("text", message);
 
-    const res = await axios.post(`/chats/send-message/${roomId}`, formdata, {
+    const res = await axios.post(`/chats/${roomId}/messages`, formdata, {
       withCredentials: true,
     });
-    console.log(res.data);
 
     sendNewMessageToSocket(message, null, null, null);
     setMessage("");
@@ -87,7 +85,7 @@ const ChatRoom = () => {
   useEffect(() => {
     axios
       .all([
-        axios.get("/main", { withCredentials: true }),
+        axios.get(`/users/${userId}`, { withCredentials: true }),
         axios.get(`/chats/${roomId}`, { withCredentials: true }),
       ])
       .then(
@@ -95,7 +93,6 @@ const ChatRoom = () => {
           // user info
           setNickname(res1.data.nickname);
           setProfile(res1.data.profile);
-          setUserId(res1.data.id);
 
           // chatroom
           // 채팅방 입장
@@ -158,14 +155,14 @@ const ChatRoom = () => {
       formdata.append(field, chatFile);
 
       axios
-        .post(`/chats/${uploadType}/${roomId}`, formdata, {
+        .post(`/chats/${roomId}/${uploadType}`, formdata, {
           withCredentials: true,
         })
         .then((res) => {
           // 실시간 파일 전송
           const chatFile = res.data;
-          console.log("chatFile=", chatFile);
-          if (uploadType === "upload-image") {
+
+          if (uploadType === "chat-images") {
             sendNewMessageToSocket(null, chatFile, null, null);
             fileRefImage.current!.value = ""; // 이미지 업로드 요소 초기화
           } else {
@@ -208,7 +205,7 @@ const ChatRoom = () => {
           accept="image/*"
           name="chatImage"
           ref={fileRefImage}
-          onChange={() => handleUpload("upload-image", "chatImage")}
+          onChange={() => handleUpload("chat-images", "chatImage")}
         />
         <label htmlFor="chat_document">
           <FontAwesomeIcon className="icon" icon={faPaperclip} />
@@ -218,7 +215,7 @@ const ChatRoom = () => {
           id="chat_document"
           name="chatDocument"
           ref={fileRefDoc}
-          onChange={() => handleUpload("upload-document", "chatDocument")}
+          onChange={() => handleUpload("chat-documents", "chatDocument")}
         />
         <input
           type="text"
