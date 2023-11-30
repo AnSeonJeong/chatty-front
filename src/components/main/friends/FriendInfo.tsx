@@ -37,13 +37,13 @@ function FriendInfo({ friendId }: { friendId: number }) {
   };
 
   const handleJoinChatroom = async () => {
-    const res = await axios.get(`/chats/member/${friendId}`, {
+    const res = await axios.get(`/chats/users/${friendId}`, {
       withCredentials: true,
+      params: { member_id: friendId },
     });
 
     if (res.data) {
       // 이미 채팅방이 있는 경우
-      console.log(res.data);
       history(`/main/chats/${res.data}`);
     } else {
       // 채팅방이 없는 경우
@@ -55,7 +55,7 @@ function FriendInfo({ friendId }: { friendId: number }) {
         nicknames: nicknames,
       };
 
-      const res = await axios.post("chats/chatroom", data, {
+      const res = await axios.post("/chats", data, {
         withCredentials: true,
       });
       history(`/main/chats/${res.data}`);

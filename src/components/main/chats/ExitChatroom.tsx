@@ -13,7 +13,7 @@ function ExitChatroom({ roomId }: { roomId: number }) {
   };
   const exitChatroom = () => {
     axios
-      .post(`/chats/exit-chatroom/${roomId}`, null, { withCredentials: true })
+      .post(`/chats/${roomId}/exit`, null, { withCredentials: true })
       .then((res) => {
         if (res.data) {
           history("/main/chats");
